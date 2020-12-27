@@ -65,6 +65,7 @@ class NewsTableViewCell: UITableViewCell {
     private func setupTextLabel() {
         postTextLabel.textAlignment = .natural
         postTextLabel.textColor = Colors.oxfordBlue
+        postTextLabel.backgroundColor = Colors.palePurplePantone
         postTextLabel.font = .systemFont(ofSize: 14)
     }
     
@@ -116,6 +117,7 @@ class NewsTableViewCell: UITableViewCell {
         postDateLabel.text = getStringFromDate(item.date)
         
         postTextLabel.text = item.text
+        postTextLabel.sizeToFit()
         setPostImage(url: item.photoURL)
         
         likeButton.setTitle(String(item.likesCount), for: .normal)
