@@ -175,6 +175,12 @@ class Feed: Decodable {
                         }
                     }
                 }
+            } else {
+                // If there is no attachments
+                // Empty photo URL
+                let news = News(sourceID: sourceID, text: text, date: date, photoURL: "", commentCount: commentsCount, likesCount: likesCount, isUserLikes: isUserLikesBool, repostsCount: repostsCount, viewsCount: viewsCount)
+                
+                newsArray.append(news)
             }
         }
     }

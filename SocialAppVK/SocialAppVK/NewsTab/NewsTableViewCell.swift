@@ -39,8 +39,8 @@ class NewsTableViewCell: UITableViewCell {
         setupAvatarImageView()
         setupNameLabel()
         setupDateLabel()
+        setupPostImageView()
         setupTextLabel()
-        postImageView.contentMode = .scaleAspectFit
     }
     
     private func setupAvatarImageView() {
@@ -50,18 +50,22 @@ class NewsTableViewCell: UITableViewCell {
     
     private func setupNameLabel() {
         nameLabel.textColor = Colors.oxfordBlue
-        nameLabel.font = .systemFont(ofSize: 16)
+        nameLabel.font = .systemFont(ofSize: 15)
     }
     
     private func setupDateLabel() {
         postDateLabel.textColor = Colors.oxfordBlue
-        postDateLabel.font = .systemFont(ofSize: 12, weight: .light)
+        postDateLabel.font = .systemFont(ofSize: 13, weight: .light)
+    }
+    
+    private func setupPostImageView() {
+        postImageView.contentMode = .scaleAspectFit
     }
     
     private func setupTextLabel() {
-        postTextLabel.textAlignment = .justified
+        postTextLabel.textAlignment = .natural
         postTextLabel.textColor = Colors.oxfordBlue
-        postTextLabel.font = .systemFont(ofSize: 15)
+        postTextLabel.font = .systemFont(ofSize: 14)
     }
     
     private func getStringFromDate(_ unixTimestamp: Int) -> String {
@@ -106,9 +110,11 @@ class NewsTableViewCell: UITableViewCell {
            let url = URL(string: photo.photo_100) {
             avatarImageView.kf.setImage(with: url)
         }
+        
         nameLabel.text = group.name
         
         postDateLabel.text = getStringFromDate(item.date)
+        
         postTextLabel.text = item.text
         setPostImage(url: item.photoURL)
         
