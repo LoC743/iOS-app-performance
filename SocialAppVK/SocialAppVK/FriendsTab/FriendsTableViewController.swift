@@ -45,10 +45,10 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             
             switch changes {
             case .update:
-                self.tableView.reloadData()
+                self.resetTableData()
                 break
             case .initial:
-                self.tableView.reloadData()
+                self.resetTableData()
             case .error(let error):
                 print("Error in \(#function). Message: \(error.localizedDescription)")
             }
@@ -70,6 +70,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     private func resetTableData() {
         updateUserData()
         resetSearchTableViewData()
+        self.tableView.reloadData()
     }
     
     private func updateUserData() {
