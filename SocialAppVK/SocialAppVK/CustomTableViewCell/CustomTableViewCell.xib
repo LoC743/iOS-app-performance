@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,43 +17,40 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yDT-Ai-Kpt">
-                        <rect key="frame" x="85" y="27.5" width="220" height="20.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rKn-gQ-t7M">
+                        <rect key="frame" x="90" y="27" width="42" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MPX-aq-fMM" customClass="CustomAvatarView" customModule="SocialAppVK" customModuleProvider="target">
-                        <rect key="frame" x="15" y="10" width="55" height="55"/>
-                        <color key="backgroundColor" red="1" green="0.94117647059999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="COR-mm-OdN" customClass="CustomAvatarView" customModule="SocialAppVK" customModuleProvider="target">
+                        <rect key="frame" x="10" y="10" width="55" height="55"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="55" id="5sH-x3-fL7"/>
-                            <constraint firstAttribute="height" constant="55" id="JFN-2S-IQr"/>
+                            <constraint firstAttribute="height" constant="55" id="Amx-W1-LP9"/>
+                            <constraint firstAttribute="width" constant="55" id="Uzh-tt-IA7"/>
                         </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                <real key="value" value="12"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
-                                <color key="value" red="0.15294117647058825" green="0.52941176470588236" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="yDT-Ai-Kpt" firstAttribute="leading" secondItem="MPX-aq-fMM" secondAttribute="trailing" constant="15" id="DZk-vd-ib1"/>
-                    <constraint firstItem="MPX-aq-fMM" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="LVu-5j-QcQ"/>
-                    <constraint firstItem="MPX-aq-fMM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="qt3-hR-vGo"/>
-                    <constraint firstItem="yDT-Ai-Kpt" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="rWN-U9-RUt"/>
-                    <constraint firstAttribute="trailing" secondItem="yDT-Ai-Kpt" secondAttribute="trailing" constant="15" id="veX-Z3-JDf"/>
+                    <constraint firstItem="rKn-gQ-t7M" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="5Cq-Tz-AIU"/>
+                    <constraint firstAttribute="bottom" secondItem="COR-mm-OdN" secondAttribute="bottom" constant="10" id="PL5-jJ-PJ9"/>
+                    <constraint firstItem="COR-mm-OdN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="dTW-L2-TjT"/>
+                    <constraint firstItem="rKn-gQ-t7M" firstAttribute="leading" secondItem="COR-mm-OdN" secondAttribute="trailing" constant="25" id="hqS-gI-4ce"/>
+                    <constraint firstItem="COR-mm-OdN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="ian-PO-ukG"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="avatarView" destination="MPX-aq-fMM" id="aCk-ye-kkf"/>
-                <outlet property="nameLabel" destination="yDT-Ai-Kpt" id="GxK-Fg-rdj"/>
+                <outlet property="avatarView" destination="COR-mm-OdN" id="jYB-As-PYY"/>
+                <outlet property="nameLabel" destination="rKn-gQ-t7M" id="Iub-V6-8Gr"/>
             </connections>
             <point key="canvasLocation" x="140.57971014492756" y="163.72767857142856"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

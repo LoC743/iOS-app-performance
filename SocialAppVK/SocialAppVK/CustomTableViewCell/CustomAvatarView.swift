@@ -8,38 +8,13 @@
 import UIKit
 import Kingfisher
 
-@IBDesignable class CustomAvatarView: UIView {
-    
-    @IBInspectable var shadowOpacity: Float = 0.8 {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
-    
-    @IBInspectable var shadowRadius: CGFloat = 8 {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
-    
-    @IBInspectable var shadowColor: UIColor = .black {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
-    
-    @IBInspectable var shadowOffset: CGSize = .zero {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
-    
+class CustomAvatarView: UIView {
     lazy var imageView: UIImageView = {
         var imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = imageView.frame.height / 2
         imageView.contentMode = .scaleAspectFill
-
+        
         return imageView
     }()
     
@@ -49,10 +24,10 @@ import Kingfisher
         view.backgroundColor = Colors.background
         view.layer.cornerRadius = view.frame.height / 2
         
-        view.layer.shadowColor = shadowColor.cgColor
-        view.layer.shadowOffset = shadowOffset
-        view.layer.shadowRadius = shadowRadius
-        view.layer.shadowOpacity = shadowOpacity
+        view.layer.shadowColor = Colors.brand.cgColor
+        view.layer.shadowOffset = .zero
+        view.layer.shadowRadius = 8
+        view.layer.shadowOpacity = 0.8
         
         return view
     }()
@@ -75,5 +50,4 @@ import Kingfisher
             imageView.image = image
         }
     }
-
 }

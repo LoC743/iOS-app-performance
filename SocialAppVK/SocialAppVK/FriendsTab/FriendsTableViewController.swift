@@ -15,6 +15,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     var friendsData: Results<User>!
     var friendToken: NotificationToken?
     
+    var sections: [String] = ["Важные", "Все"]
     var importantFriends: [User] = []
     var otherFriends: [User] = []
     
@@ -42,7 +43,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     
     @objc func handleRefreshControl() {
         loadFriendList()
-        reloadTableData()
+        resetTableData()
 
         // Dismiss the refresh control.
            DispatchQueue.main.async {
@@ -50,10 +51,14 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
            }
     }
     
-    private func reloadTableData() {
+    private func resetTableData() {
+        sections = ["Важные", "Все"]
         importantFriends = []
         otherFriends = []
-        
+        getSectionData()
+    }
+    
+    private func getSectionData() {
         if friendsData.count > 5 {
             for (index, friend) in friendsData.enumerated() {
                 if index > 4 {
@@ -74,17 +79,17 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     private func getUserData() {
         self.friendsData = DatabaseManager.shared.loadUserData()
         
-        reloadTableData()
+        resetTableData()
         
         self.friendToken = friendsData.observe(on: DispatchQueue.main, { [weak self] (changes) in
             guard let self = self else { return }
             
             switch changes {
             case .update:
-                self.reloadTableData()
+                self.resetTableData()
                 break
             case .initial:
-                self.reloadTableData()
+                self.resetTableData()
             case .error(let error):
                 print("Error in \(#function). Message: \(error.localizedDescription)")
             }
@@ -106,7 +111,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return sections.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -114,15 +119,6 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             return importantFriends.count
         } else {
             return otherFriends.count
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection
-                                section: Int) -> String? {
-        if section == 0 {
-            return "Важные"
-        } else {
-            return "Все \(otherFriends.count)"
         }
     }
 
@@ -181,12 +177,9 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         sectionLabel.textAlignment = .left
         sectionLabel.font = .systemFont(ofSize: 16)
         sectionLabel.textColor = Colors.brand
+        sectionLabel.text = sections[section]
         
-        if section == 0 {
-            sectionLabel.text = "Важные"
-        } else {
-            sectionLabel.text = "Все"
-            
+        if section == 1 {
             let numberOfFirendsFrame: CGRect = CGRect(x: 50, y: 0, width: 100, height: viewHeight/2)
             let numberOfFirendsLabel = UILabel(frame: numberOfFirendsFrame)
             numberOfFirendsLabel.textAlignment = .left
@@ -218,36 +211,21 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     
     // MARK: - SearchBar setup
     
-//    func resetSearchTableViewData() {
-//        searchSections = sections
-//        searchData = userData
-//    }
-    
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        searchData = [:]
-//        searchSections = []
-//        var sectionSearchSet: Set<Character> = []
-//
-//        if searchText.isEmpty {
-//            resetSearchTableViewData()
-//        } else {
-//            for section in sections {
-//                let userArray = userData[section] ?? []
-//
-//                for user in userArray {
-//                    if user.name.lowercased().contains(searchText.lowercased()) {
-//                        if searchData[section] == nil {
-//                            searchData[section] = []
-//                        }
-//                        sectionSearchSet.insert(section)
-//                        searchData[section]?.append(user)
-//                    }
-//                }
-//            }
-//
-//            searchSections = Array(sectionSearchSet).sorted()
-//         }
-//
-//        self.tableView.reloadData()
-//    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        sections = ["Поиск"]
+        importantFriends = []
+        otherFriends = []
+        
+        if searchText.isEmpty {
+            resetTableData()
+        } else {
+            for friend in friendsData {
+                let searchString = searchText.lowercased()
+                if friend.firstName.lowercased().starts(with: searchString) || friend.lastName.lowercased().starts(with: searchString) {
+                    importantFriends.append(friend)
+                }
+            }
+            tableView.reloadData()
+        }
+    }
 }
