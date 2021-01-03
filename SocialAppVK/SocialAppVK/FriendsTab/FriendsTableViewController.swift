@@ -29,11 +29,28 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         
         view.backgroundColor = Colors.background
         tableView.sectionIndexBackgroundColor = Colors.background
+        setupRefreshControl()
         
         getUserData()
     }
     
-    private func getSections() {
+    private func setupRefreshControl() {
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.tintColor = Colors.brand
+        tableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+    }
+    
+    @objc func handleRefreshControl() {
+        loadFriendList()
+        reloadTableData()
+
+        // Dismiss the refresh control.
+           DispatchQueue.main.async {
+              self.tableView.refreshControl?.endRefreshing()
+           }
+    }
+    
+    private func reloadTableData() {
         importantFriends = []
         otherFriends = []
         
@@ -57,17 +74,17 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     private func getUserData() {
         self.friendsData = DatabaseManager.shared.loadUserData()
         
-        getSections()
+        reloadTableData()
         
         self.friendToken = friendsData.observe(on: DispatchQueue.main, { [weak self] (changes) in
             guard let self = self else { return }
             
             switch changes {
             case .update:
-                self.getSections()
+                self.reloadTableData()
                 break
             case .initial:
-                self.getSections()
+                self.reloadTableData()
             case .error(let error):
                 print("Error in \(#function). Message: \(error.localizedDescription)")
             }
@@ -157,7 +174,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         let viewFrame: CGRect = CGRect(x: 0, y: 0, width: tableView.frame.width, height: viewHeight)
         let view = UIView(frame: viewFrame)
 
-        view.backgroundColor = Colors.background.withAlphaComponent(0.9)
+        view.backgroundColor = Colors.background
 
         let sectionLabelFrame: CGRect = CGRect(x: 15, y: 0, width: 100, height: viewHeight/2)
         let sectionLabel = UILabel(frame: sectionLabelFrame)
@@ -174,7 +191,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             let numberOfFirendsLabel = UILabel(frame: numberOfFirendsFrame)
             numberOfFirendsLabel.textAlignment = .left
             numberOfFirendsLabel.font = .systemFont(ofSize: 14)
-            numberOfFirendsLabel.textColor = Colors.text.withAlphaComponent(0.8)
+            numberOfFirendsLabel.textColor = .gray
             numberOfFirendsLabel.text = "\(friendsData.count)"
             view.addSubview(numberOfFirendsLabel)
             
