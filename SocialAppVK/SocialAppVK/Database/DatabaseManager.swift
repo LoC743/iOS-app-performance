@@ -24,7 +24,7 @@ class DatabaseManager {
     
     func saveUserData(users: [User]) {
         try? realm.write {
-            realm.add(users)
+            realm.add(users, update: .all)
         }
     }
     
