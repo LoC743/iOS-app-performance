@@ -49,12 +49,13 @@ class User: Object, CellModel {
             return "\(firstName) \(lastName)"
         }
     }
+    @objc dynamic var order: Int = -1
     
     override class func primaryKey() -> String? {
         return "id"
     }
     
-    convenience init(id: Int, firstName: String, lastName: String, gender: Int, hasPhoto: Bool, photo: Photo?, city: City?, isOnline: Bool, birthDay: String?) {
+    convenience init(id: Int, firstName: String, lastName: String, gender: Int, hasPhoto: Bool, photo: Photo?, city: City?, isOnline: Bool, birthDay: String?, order: Int) {
         self.init()
         
         self.id = id
@@ -66,6 +67,7 @@ class User: Object, CellModel {
         self.city = city
         self.isOnline = isOnline
         self.birthDay = birthDay
+        self.order = order
     }
 }
 
@@ -111,7 +113,7 @@ class FriendList: Decodable {
         var items = try values.nestedUnkeyedContainer(forKey: .items)
         
         let itemsCount: Int = items.count ?? 0
-        for _ in 0..<itemsCount {
+        for i in 0..<itemsCount {
             let friendContainer = try items.nestedContainer(keyedBy: FriendCodingKeys.self)
             // Basic fields
             let id = try friendContainer.decode(Int.self, forKey: .id)
@@ -143,7 +145,7 @@ class FriendList: Decodable {
             let photo200 = try? friendContainer.decode(String.self, forKey: .photo200)
             let photo = Photo(photo_50: photo50 ?? "", photo_100: photo100 ?? "", photo_200: photo200 ?? "")
             
-            let friend = User(id: id, firstName: firstName, lastName: lastName, gender: sex, hasPhoto: hasPhotoBool, photo: photo, city: city, isOnline: isOnlineBool, birthDay: birthDayString)
+            let friend = User(id: id, firstName: firstName, lastName: lastName, gender: sex, hasPhoto: hasPhotoBool, photo: photo, city: city, isOnline: isOnlineBool, birthDay: birthDayString, order: i)
             
             self.friends.append(friend)
         }

@@ -12,13 +12,11 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
 
-    var sections: [Character] = []             // Массив букв для выделения секций
-    var userData: [Character: [User]] = [:]    // Словарь для получения массива пользователей по букве секции
-    var searchData: [Character: [User]] = [:]  // Такой же как и userData, только при использовании UISearchBar
-    var searchSections: [Character] = []       // Такой же как и sections, используется при UISearchBar
-    
     var friendsData: Results<User>!
     var friendToken: NotificationToken?
+    
+    var importantFriends: [User] = []
+    var otherFriends: [User] = []
     
     private let reuseIdentifier = "CustomTableViewCell"
 
@@ -29,26 +27,47 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         
         tableView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellReuseIdentifier: reuseIdentifier)
         
-        view.backgroundColor = Colors.palePurplePantone
-        tableView.sectionIndexBackgroundColor = Colors.palePurplePantone
+        view.backgroundColor = Colors.background
+        tableView.sectionIndexBackgroundColor = Colors.background
         
         getUserData()
+    }
+    
+    private func getSections() {
+        importantFriends = []
+        otherFriends = []
+        
+        if friendsData.count > 5 {
+            for (index, friend) in friendsData.enumerated() {
+                if index > 4 {
+                    otherFriends.append(friend)
+                } else {
+                    importantFriends.append(friend)
+                }
+            }
+        } else {
+            for friend in friendsData {
+                importantFriends.append(friend)
+            }
+        }
+        
+        self.tableView.reloadData()
     }
     
     private func getUserData() {
         self.friendsData = DatabaseManager.shared.loadUserData()
         
-        resetTableData()
+        getSections()
         
         self.friendToken = friendsData.observe(on: DispatchQueue.main, { [weak self] (changes) in
             guard let self = self else { return }
             
             switch changes {
             case .update:
-                self.resetTableData()
+                self.getSections()
                 break
             case .initial:
-                self.resetTableData()
+                self.getSections()
             case .error(let error):
                 print("Error in \(#function). Message: \(error.localizedDescription)")
             }
@@ -66,54 +85,44 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             }
         }
     }
-    
-    private func resetTableData() {
-        updateUserData()
-        resetSearchTableViewData()
-        self.tableView.reloadData()
-    }
-    
-    private func updateUserData() {
-        userData = [:]
-        var sectionSet: Set<Character> = []
-        for user in friendsData {
-            if let letter = user.name.first {
-                sectionSet.insert(letter)
-
-                if userData[letter] == nil {
-                    userData[letter] = []
-                }
-
-                userData[letter]?.append(user)
-            }
-        }
-        sections = sectionSet.sorted()
-    }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return searchSections.count
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionLetter = searchSections[section]
-        let users = searchData[sectionLetter] ?? []
-        return users.count
+        if section == 0 {
+            return importantFriends.count
+        } else {
+            return otherFriends.count
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection
                                 section: Int) -> String? {
-        return String(searchSections[section])
+        if section == 0 {
+            return "Важные"
+        } else {
+            return "Все \(otherFriends.count)"
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! CustomTableViewCell
         
-        let sectionLetter = searchSections[indexPath.section]
-        let user = searchData[sectionLetter]![indexPath.row]
         
-        cell.setValues(item: user)
+        var user: User?
+        if indexPath.section == 0 {
+            user = importantFriends[indexPath.row]
+        } else {
+            user = otherFriends[indexPath.row]
+        }
+        
+        guard let userToSet = user else { return UITableViewCell() }
+        
+        cell.setValues(item: userToSet)
 
         return cell
     }
@@ -125,37 +134,54 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "FriendsCollectionViewController") as! FriendsCollectionViewController
         
-        let sectionLetter = searchSections[indexPath.section]
-        let user = searchData[sectionLetter]![indexPath.row]
+        var user: User?
+        if indexPath.section == 0 {
+            user = importantFriends[indexPath.row]
+        } else {
+            user = otherFriends[indexPath.row]
+        }
         
-        vc.title = user.name
-        vc.getImages(user: user)
+        guard let userToSet = user else { return }
+        
+        vc.title = userToSet.name
+        vc.getImages(user: userToSet)
         
         self.navigationController?.pushViewController(vc, animated: true)
 
     }
     
-    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return searchSections.map { String($0) }
-    }
-    
     // MARK: - Custom Section View
-    
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let viewHeight: CGFloat = 40
+        let viewHeight: CGFloat = 60
         let viewFrame: CGRect = CGRect(x: 0, y: 0, width: tableView.frame.width, height: viewHeight)
         let view = UIView(frame: viewFrame)
-        
-        view.backgroundColor = Colors.palePurplePantone.withAlphaComponent(0.65)
-        
-        let sectionLabelFrame: CGRect = CGRect(x: 15, y: 5, width: 15, height: viewHeight/2)
+
+        view.backgroundColor = Colors.background.withAlphaComponent(0.9)
+
+        let sectionLabelFrame: CGRect = CGRect(x: 15, y: 0, width: 100, height: viewHeight/2)
         let sectionLabel = UILabel(frame: sectionLabelFrame)
-        sectionLabel.textAlignment = .center
-        sectionLabel.textColor = Colors.oxfordBlue
-        sectionLabel.text = String(searchSections[section])
+        sectionLabel.textAlignment = .left
+        sectionLabel.font = .systemFont(ofSize: 16)
+        sectionLabel.textColor = Colors.text
+        
+        if section == 0 {
+            sectionLabel.text = "Важные"
+        } else {
+            sectionLabel.text = "Все"
+            
+            let numberOfFirendsFrame: CGRect = CGRect(x: 50, y: 0, width: 100, height: viewHeight/2)
+            let numberOfFirendsLabel = UILabel(frame: numberOfFirendsFrame)
+            numberOfFirendsLabel.textAlignment = .left
+            numberOfFirendsLabel.font = .systemFont(ofSize: 14)
+            numberOfFirendsLabel.textColor = Colors.text.withAlphaComponent(0.8)
+            numberOfFirendsLabel.text = "\(friendsData.count)"
+            view.addSubview(numberOfFirendsLabel)
+            
+        }
         
         view.addSubview(sectionLabel)
-        
+
         return view
     }
     
@@ -175,36 +201,36 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     
     // MARK: - SearchBar setup
     
-    func resetSearchTableViewData() {
-        searchSections = sections
-        searchData = userData
-    }
+//    func resetSearchTableViewData() {
+//        searchSections = sections
+//        searchData = userData
+//    }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchData = [:]
-        searchSections = []
-        var sectionSearchSet: Set<Character> = []
-
-        if searchText.isEmpty {
-            resetSearchTableViewData()
-        } else {
-            for section in sections {
-                let userArray = userData[section] ?? []
-
-                for user in userArray {
-                    if user.name.lowercased().contains(searchText.lowercased()) {
-                        if searchData[section] == nil {
-                            searchData[section] = []
-                        }
-                        sectionSearchSet.insert(section)
-                        searchData[section]?.append(user)
-                    }
-                }
-            }
-
-            searchSections = Array(sectionSearchSet).sorted()
-         }
-
-        self.tableView.reloadData()
-    }
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        searchData = [:]
+//        searchSections = []
+//        var sectionSearchSet: Set<Character> = []
+//
+//        if searchText.isEmpty {
+//            resetSearchTableViewData()
+//        } else {
+//            for section in sections {
+//                let userArray = userData[section] ?? []
+//
+//                for user in userArray {
+//                    if user.name.lowercased().contains(searchText.lowercased()) {
+//                        if searchData[section] == nil {
+//                            searchData[section] = []
+//                        }
+//                        sectionSearchSet.insert(section)
+//                        searchData[section]?.append(user)
+//                    }
+//                }
+//            }
+//
+//            searchSections = Array(sectionSearchSet).sorted()
+//         }
+//
+//        self.tableView.reloadData()
+//    }
 }
