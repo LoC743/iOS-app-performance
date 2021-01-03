@@ -17,7 +17,7 @@ class WebLoginViewController: UIViewController, WKNavigationDelegate{
         }
     }
     
-    private let appID = "7676495"
+    private let appID = "7717628"
     private let versionAPI = "5.126"
     private let scope = "336902"
     private let redirectURI = "https://oauth.vk.com/blank.html"
