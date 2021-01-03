@@ -41,7 +41,7 @@ class NetworkManager {
             "user_id": userID,
             "access_token": token,
             "v": versionVKAPI,
-            "fields": "bdate, city, sex, has_photo, photo_50, photo_100, photo_200, online",
+            "fields": "bdate, city, sex, has_photo, photo_50, photo_100, photo_200, online, last_seen",
             "count": count,
             "offset": offset,
             "order": "hints"

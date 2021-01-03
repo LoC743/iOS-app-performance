@@ -46,7 +46,7 @@ import Kingfisher
     lazy var view: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         
-        view.backgroundColor = Colors.palePurplePantone
+        view.backgroundColor = Colors.background
         view.layer.cornerRadius = view.frame.height / 2
         
         view.layer.shadowColor = shadowColor.cgColor

@@ -42,6 +42,7 @@ class User: Object, CellModel {
     @objc dynamic var hasPhoto: Bool = false
     @objc dynamic var photo: Photo? = nil
     @objc dynamic var isOnline: Bool = false
+    @objc dynamic var lastSeen: Int = -1
     
     // Extra
     var name: String {
@@ -55,7 +56,7 @@ class User: Object, CellModel {
         return "id"
     }
     
-    convenience init(id: Int, firstName: String, lastName: String, gender: Int, hasPhoto: Bool, photo: Photo?, city: City?, isOnline: Bool, birthDay: String?, order: Int) {
+    convenience init(id: Int, firstName: String, lastName: String, gender: Int, hasPhoto: Bool, photo: Photo?, city: City?, isOnline: Bool, birthDay: String?, order: Int, lastSeen: Int) {
         self.init()
         
         self.id = id
@@ -68,6 +69,7 @@ class User: Object, CellModel {
         self.isOnline = isOnline
         self.birthDay = birthDay
         self.order = order
+        self.lastSeen = lastSeen
     }
 }
 
@@ -96,11 +98,17 @@ class FriendList: Decodable {
         case photo50 = "photo_50"
         case photo100 = "photo_100"
         case photo200 = "photo_200"
+        case lastSeen = "last_seen"
     }
     
     enum CityCodingKeys: String, CodingKey {
         case id
         case title
+    }
+    
+    enum LastSeenCodingKeys: String, CodingKey {
+        case platform
+        case time
     }
     
     required init(from decoder: Decoder) throws {
@@ -145,7 +153,13 @@ class FriendList: Decodable {
             let photo200 = try? friendContainer.decode(String.self, forKey: .photo200)
             let photo = Photo(photo_50: photo50 ?? "", photo_100: photo100 ?? "", photo_200: photo200 ?? "")
             
-            let friend = User(id: id, firstName: firstName, lastName: lastName, gender: sex, hasPhoto: hasPhotoBool, photo: photo, city: city, isOnline: isOnlineBool, birthDay: birthDayString, order: i)
+            let lastSeenContainer = try? friendContainer.nestedContainer(keyedBy: LastSeenCodingKeys.self, forKey: .lastSeen)
+            var lastSeen: Int = -1
+            if let lastSeenContainer = lastSeenContainer {
+                lastSeen = try lastSeenContainer.decode(Int.self, forKey: .time)
+            }
+            
+            let friend = User(id: id, firstName: firstName, lastName: lastName, gender: sex, hasPhoto: hasPhotoBool, photo: photo, city: city, isOnline: isOnlineBool, birthDay: birthDayString, order: i, lastSeen: lastSeen)
             
             self.friends.append(friend)
         }

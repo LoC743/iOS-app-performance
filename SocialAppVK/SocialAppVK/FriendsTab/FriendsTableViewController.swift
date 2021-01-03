@@ -163,7 +163,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         let sectionLabel = UILabel(frame: sectionLabelFrame)
         sectionLabel.textAlignment = .left
         sectionLabel.font = .systemFont(ofSize: 16)
-        sectionLabel.textColor = Colors.text
+        sectionLabel.textColor = Colors.brand
         
         if section == 0 {
             sectionLabel.text = "Важные"

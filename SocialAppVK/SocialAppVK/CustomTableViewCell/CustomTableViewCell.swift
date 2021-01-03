@@ -14,7 +14,7 @@ class CustomTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        contentView.backgroundColor = Colors.palePurplePantone
+        contentView.backgroundColor = Colors.background
         
         setupAvatarView()
     }

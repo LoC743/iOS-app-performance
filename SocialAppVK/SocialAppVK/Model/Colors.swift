@@ -11,7 +11,7 @@ import UIKit
 struct Colors {
     static let background = UIColor.white
     static let text = UIColor.black
-    static let brand = UIColor(red: 39/255, green: 135/255, blue: 145/255, alpha: 1.0)
+    static let brand = UIColor(red: 39/255, green: 135/255, blue: 245/255, alpha: 1.0)
     
     static let oxfordBlue = UIColor(red: 9/255, green: 21/255, blue: 64/255, alpha: 1.0)
     static let cornflowerBlue = UIColor(red: 118/255, green: 146/255, blue: 255/255, alpha: 1.0)
