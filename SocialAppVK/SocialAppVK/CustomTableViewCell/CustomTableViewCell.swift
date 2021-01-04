@@ -26,7 +26,7 @@ class CustomTableViewCell: UITableViewCell {
     private func getLastSeenDate(lastSeenUnix: Int) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(lastSeenUnix))
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy в hh:mm"
+        formatter.dateFormat = "dd.MM.yyyy в HH:mm"
         let lastSeenString = formatter.string(from: date)
         
         return lastSeenString
