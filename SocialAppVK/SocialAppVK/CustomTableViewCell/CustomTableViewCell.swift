@@ -49,12 +49,7 @@ class CustomTableViewCell: UITableViewCell {
         }
     }
     
-    func setFriendCell(friend: User) {
-        setStatusLabel(friend)
-        setValues(item: friend)
-    }
-        
-    func setValues(item: CellModel) {
+    private func setValues(item: CellModel) {
         if let photo = item.photo,
            let url = URL(string: photo.photo_100) {
             avatarView.setImage(url)
@@ -62,6 +57,17 @@ class CustomTableViewCell: UITableViewCell {
         
         nameLabel.text = item.name
     }
+    
+    func setFriendCell(friend: User) {
+        setStatusLabel(friend)
+        setValues(item: friend)
+    }
+     
+    func setGroupCell(group: Group) {
+        statusLabel.isHidden = true
+        setValues(item: group)
+    }
+
     
     func setupAvatarView() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.avatarViewTapped(_:)))

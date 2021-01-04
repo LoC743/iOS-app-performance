@@ -22,7 +22,7 @@ class GroupsCollectionViewController: UICollectionViewController {
 
         collectionView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
 
-        view.backgroundColor = Colors.palePurplePantone
+        view.backgroundColor = Colors.background
         
         setupAddButton()
     }

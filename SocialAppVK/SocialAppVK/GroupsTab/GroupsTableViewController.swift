@@ -30,7 +30,7 @@ class GroupsTableViewController: UITableViewController {
         
         tableView.register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
         
-        view.backgroundColor = Colors.palePurplePantone
+        view.backgroundColor = Colors.background
         
         getGroupData()
     }
@@ -90,7 +90,7 @@ class GroupsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath) as! CustomTableViewCell
         
-        cell.setValues(item: groupsData[indexPath.row])
+        cell.setGroupCell(group: groupsData[indexPath.row])
 
         return cell
     }
