@@ -134,8 +134,8 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         }
         
         guard let userToSet = user else { return UITableViewCell() }
-        
-        cell.setValues(item: userToSet)
+
+        cell.setFriendCell(friend: userToSet)
 
         return cell
     }

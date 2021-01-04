@@ -18,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rKn-gQ-t7M">
-                        <rect key="frame" x="90" y="27" width="42" height="21"/>
+                        <rect key="frame" x="90" y="15" width="42" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -31,19 +31,28 @@
                             <constraint firstAttribute="width" constant="55" id="Uzh-tt-IA7"/>
                         </constraints>
                     </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qf4-U6-J3e">
+                        <rect key="frame" x="90" y="43" width="42" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="rKn-gQ-t7M" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="5Cq-Tz-AIU"/>
-                    <constraint firstAttribute="bottom" secondItem="COR-mm-OdN" secondAttribute="bottom" constant="10" id="PL5-jJ-PJ9"/>
-                    <constraint firstItem="COR-mm-OdN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="dTW-L2-TjT"/>
-                    <constraint firstItem="rKn-gQ-t7M" firstAttribute="leading" secondItem="COR-mm-OdN" secondAttribute="trailing" constant="25" id="hqS-gI-4ce"/>
-                    <constraint firstItem="COR-mm-OdN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="ian-PO-ukG"/>
+                    <constraint firstItem="Qf4-U6-J3e" firstAttribute="leading" secondItem="COR-mm-OdN" secondAttribute="trailing" constant="25" id="5pP-70-2R2"/>
+                    <constraint firstItem="Qf4-U6-J3e" firstAttribute="top" secondItem="rKn-gQ-t7M" secondAttribute="bottom" constant="7" id="A6o-lq-oOR"/>
+                    <constraint firstItem="COR-mm-OdN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="BTe-zm-Dc4"/>
+                    <constraint firstAttribute="bottom" secondItem="COR-mm-OdN" secondAttribute="bottom" constant="10" id="DAx-Hj-GwO"/>
+                    <constraint firstItem="rKn-gQ-t7M" firstAttribute="leading" secondItem="COR-mm-OdN" secondAttribute="trailing" constant="25" id="Ws4-s7-4fA"/>
+                    <constraint firstItem="rKn-gQ-t7M" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="nj5-8D-qeL"/>
+                    <constraint firstItem="COR-mm-OdN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="wGl-bV-GqI"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="avatarView" destination="COR-mm-OdN" id="jYB-As-PYY"/>
                 <outlet property="nameLabel" destination="rKn-gQ-t7M" id="Iub-V6-8Gr"/>
+                <outlet property="statusLabel" destination="Qf4-U6-J3e" id="YJa-09-W2h"/>
             </connections>
             <point key="canvasLocation" x="140.57971014492756" y="163.72767857142856"/>
         </tableViewCell>
