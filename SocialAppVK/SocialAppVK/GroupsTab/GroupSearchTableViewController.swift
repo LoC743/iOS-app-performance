@@ -46,7 +46,7 @@ class GroupSearchTableViewController: UITableViewController, UISearchBarDelegate
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "GroupsCollectionViewController") as! GroupsCollectionViewController
+        let vc = GroupProfileViewController(nibName: "GroupProfileViewController", bundle: nil)
         
         let group = groups[indexPath.row]
         
