@@ -16,7 +16,7 @@ class WebLoginViewController: UIViewController, WKNavigationDelegate{
             webKitView.navigationDelegate = self
         }
     }
-    
+
     private let appID = "7718572"
     private let versionAPI = "5.126"
     private let scope = "336902"
