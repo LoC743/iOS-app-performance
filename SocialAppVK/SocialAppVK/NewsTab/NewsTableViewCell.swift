@@ -30,17 +30,17 @@ class NewsTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        contentView.backgroundColor = Colors.palePurplePantone
+        contentView.backgroundColor = Colors.background
         setupView()
     }
     
     private func setupView() {
-        self.contentView.backgroundColor = Colors.palePurplePantone
+        self.contentView.backgroundColor = Colors.background
         setupAvatarImageView()
         setupNameLabel()
         setupDateLabel()
+        setupPostImageView()
         setupTextLabel()
-        postImageView.contentMode = .scaleAspectFit
     }
     
     private func setupAvatarImageView() {
@@ -49,19 +49,24 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     private func setupNameLabel() {
-        nameLabel.textColor = Colors.oxfordBlue
-        nameLabel.font = .systemFont(ofSize: 16)
+        nameLabel.textColor = Colors.text
+        nameLabel.font = .systemFont(ofSize: 15, weight: .semibold)
     }
     
     private func setupDateLabel() {
-        postDateLabel.textColor = Colors.oxfordBlue
-        postDateLabel.font = .systemFont(ofSize: 12, weight: .light)
+        postDateLabel.textColor = Colors.text
+        postDateLabel.font = .systemFont(ofSize: 13, weight: .light)
+    }
+    
+    private func setupPostImageView() {
+        postImageView.contentMode = .scaleAspectFit
     }
     
     private func setupTextLabel() {
-        postTextLabel.textAlignment = .justified
-        postTextLabel.textColor = Colors.oxfordBlue
-        postTextLabel.font = .systemFont(ofSize: 15)
+        postTextLabel.textAlignment = .natural
+        postTextLabel.textColor = Colors.text
+        postTextLabel.backgroundColor = Colors.background
+        postTextLabel.font = .systemFont(ofSize: 14)
     }
     
     private func getStringFromDate(_ unixTimestamp: Int) -> String {
@@ -106,10 +111,13 @@ class NewsTableViewCell: UITableViewCell {
            let url = URL(string: photo.photo_100) {
             avatarImageView.kf.setImage(with: url)
         }
+        
         nameLabel.text = group.name
         
         postDateLabel.text = getStringFromDate(item.date)
+        
         postTextLabel.text = item.text
+        postTextLabel.sizeToFit()
         setPostImage(url: item.photoURL)
         
         likeButton.setTitle(String(item.likesCount), for: .normal)

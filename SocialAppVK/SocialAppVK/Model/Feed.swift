@@ -128,7 +128,10 @@ class Feed: Decodable {
             let newsContainer = try news.nestedContainer(keyedBy: NewsCodingKeys.self)
             
             let sourceID = try newsContainer.decode(Int.self, forKey: .sourceID)
-            let text = try newsContainer.decode(String.self, forKey: .text)
+            let text = try? newsContainer.decode(String.self, forKey: .text)
+            
+            if text == nil { break }
+            
             let date = try newsContainer.decode(Int.self, forKey: .date)
             
             let commentsContainer = try newsContainer.nestedContainer(keyedBy: CommentsCodingKeys.self, forKey: .comments)
@@ -154,8 +157,10 @@ class Feed: Decodable {
                     let attachmentsContainer = try attachments.nestedContainer(keyedBy: AttachmentsCodingKeys.self)
                     
                     let type = try attachmentsContainer.decode(String.self, forKey: .type)
-                    
                     if type != "photo" {
+                        let news = News(sourceID: sourceID, text: text!, date: date, photoURL: "", commentCount: commentsCount, likesCount: likesCount, isUserLikes: isUserLikesBool, repostsCount: repostsCount, viewsCount: viewsCount)
+                        
+                        newsArray.append(news)
                         break
                     }
                     
@@ -168,13 +173,19 @@ class Feed: Decodable {
                         let url = try sizeContainer.decode(String.self, forKey: .url)
                         
                         if z == sizesCount-1 {
-                            let news = News(sourceID: sourceID, text: text, date: date, photoURL: url, commentCount: commentsCount, likesCount: likesCount, isUserLikes: isUserLikesBool, repostsCount: repostsCount, viewsCount: viewsCount)
+                            let news = News(sourceID: sourceID, text: text!, date: date, photoURL: url, commentCount: commentsCount, likesCount: likesCount, isUserLikes: isUserLikesBool, repostsCount: repostsCount, viewsCount: viewsCount)
                             
                             newsArray.append(news)
 
                         }
                     }
                 }
+            } else {
+                // If there is no attachments
+                
+                let news = News(sourceID: sourceID, text: text!, date: date, photoURL: "", commentCount: commentsCount, likesCount: likesCount, isUserLikes: isUserLikesBool, repostsCount: repostsCount, viewsCount: viewsCount)
+                
+                newsArray.append(news)
             }
         }
     }

@@ -24,7 +24,7 @@ class DatabaseManager {
     
     func saveUserData(users: [User]) {
         try? realm.write {
-            realm.add(users)
+            realm.add(users, update: .modified)
         }
     }
     
@@ -41,7 +41,7 @@ class DatabaseManager {
     }
     
     func loadUserData() -> Results<User> {
-        return realm.objects(User.self)
+        return realm.objects(User.self).sorted(byKeyPath: "order")
     }
     
     func loadImageDataBy(ownerID: Int) -> Results<Image> {
