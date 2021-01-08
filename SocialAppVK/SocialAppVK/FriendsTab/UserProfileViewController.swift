@@ -98,6 +98,7 @@ class UserProfileViewController: UIViewController {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderSectionCollectionReusableView", for: indexPath) as? HeaderSectionCollectionReusableView {
+            sectionHeader.contentView.backgroundColor = Colors.background
             sectionHeader.profileImageView.roundView()
             sectionHeader.profileImageView.clipsToBounds = true
             sectionHeader.profileImageView.kf.setImage(with: URL(string: user.photo?.photo_200 ?? ""))

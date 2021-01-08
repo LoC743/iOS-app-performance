@@ -21,7 +21,7 @@ class NewsTableViewController: UITableViewController {
         
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 600
-        tableView.backgroundColor = Colors.palePurplePantone
+        tableView.backgroundColor = Colors.background
     }
     
     override func viewDidAppear(_ animated: Bool) {

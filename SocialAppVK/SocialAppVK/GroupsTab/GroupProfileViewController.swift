@@ -137,6 +137,7 @@ class GroupProfileViewController: UIViewController {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: reuseIdentifierHeader, for: indexPath) as? HeaderGroupSectionCollectionReusableView {
+            sectionHeader.contentView.backgroundColor = Colors.background
             sectionHeader.profileImageView.roundView()
             sectionHeader.profileImageView.clipsToBounds = true
             sectionHeader.profileImageView.kf.setImage(with: URL(string: group.photo?.photo_200 ?? ""))

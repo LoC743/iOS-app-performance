@@ -65,6 +65,7 @@
             </constraints>
             <connections>
                 <outlet property="additionalInfoLabel" destination="YRx-fc-Rqc" id="1eS-yl-vzq"/>
+                <outlet property="contentView" destination="1p4-N6-MlR" id="nsY-Z6-5Ro"/>
                 <outlet property="fullnameLabel" destination="Rka-YR-t8R" id="PcZ-9o-1kn"/>
                 <outlet property="profileImageView" destination="ZOZ-CY-OdT" id="Y6r-Ne-fod"/>
                 <outlet property="statusLabel" destination="iby-cm-kW7" id="k8K-v5-SiV"/>

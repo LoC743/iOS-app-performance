@@ -50,6 +50,7 @@
                 <constraint firstItem="jpT-1j-ilE" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" id="Z3b-MI-n69"/>
             </constraints>
             <connections>
+                <outlet property="contentView" destination="jpT-1j-ilE" id="4Pk-eH-kcc"/>
                 <outlet property="nameLabel" destination="2Cd-MN-FRx" id="c3k-MI-l5L"/>
                 <outlet property="profileImageView" destination="weR-pl-Mwy" id="JcH-39-l7A"/>
             </connections>

@@ -112,7 +112,6 @@
                                 <viewLayoutGuide key="frameLayoutGuide" id="GHH-q7-MKn"/>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="0.95294117647058818" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="rlR-I2-kOd" secondAttribute="bottom" id="27z-X3-ggw"/>
                             <constraint firstItem="rlR-I2-kOd" firstAttribute="top" secondItem="YBC-8J-g8Y" secondAttribute="top" id="Vp6-kZ-Prj"/>

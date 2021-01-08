@@ -8,6 +8,7 @@
 import UIKit
 
 class HeaderSectionCollectionReusableView: UICollectionReusableView {
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var fullnameLabel: UILabel!
     @IBOutlet weak var statusLabel: UILabel!
