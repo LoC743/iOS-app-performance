@@ -37,7 +37,7 @@ class NewsTableViewController: UITableViewController {
     }
     
     private func loadNews() {
-        NetworkManager.shared.loadFeed(count: 200) { [weak self] (feedResponse) in
+        NetworkManager.shared.loadFeed(count: 20) { [weak self] (feedResponse) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.newsArray = feedResponse.newsArray
