@@ -30,12 +30,12 @@ class NewsTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        contentView.backgroundColor = Colors.palePurplePantone
+        contentView.backgroundColor = Colors.background
         setupView()
     }
     
     private func setupView() {
-        self.contentView.backgroundColor = Colors.palePurplePantone
+        self.contentView.backgroundColor = Colors.background
         setupAvatarImageView()
         setupNameLabel()
         setupDateLabel()
@@ -49,12 +49,12 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     private func setupNameLabel() {
-        nameLabel.textColor = Colors.oxfordBlue
-        nameLabel.font = .systemFont(ofSize: 15)
+        nameLabel.textColor = Colors.text
+        nameLabel.font = .systemFont(ofSize: 15, weight: .semibold)
     }
     
     private func setupDateLabel() {
-        postDateLabel.textColor = Colors.oxfordBlue
+        postDateLabel.textColor = Colors.text
         postDateLabel.font = .systemFont(ofSize: 13, weight: .light)
     }
     
@@ -64,8 +64,8 @@ class NewsTableViewCell: UITableViewCell {
     
     private func setupTextLabel() {
         postTextLabel.textAlignment = .natural
-        postTextLabel.textColor = Colors.oxfordBlue
-        postTextLabel.backgroundColor = Colors.palePurplePantone
+        postTextLabel.textColor = Colors.text
+        postTextLabel.backgroundColor = Colors.background
         postTextLabel.font = .systemFont(ofSize: 14)
     }
     

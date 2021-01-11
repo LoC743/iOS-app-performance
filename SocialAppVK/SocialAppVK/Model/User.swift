@@ -13,51 +13,63 @@ protocol CellModel {
     var photo: Photo? { get }
 }
 
-enum Sex: Int {
-    case female = 1
-    case male = 2
-    case empty = -1
-}
-
-//struct City {
-//    var id: Int
-//    var title: String
-//}
-
-class User: Object, CellModel {
+class City: Object {
     @objc dynamic var id: Int = -1
-    @objc dynamic var firstName: String = ""
-    @objc dynamic var lastName: String = ""
-    @objc dynamic var gender: Int {
-        get {
-            return sex.rawValue
-        }
-    }
-//    var city: City?
-    @objc dynamic var hasPhoto: Bool = false
-    @objc dynamic var photo: Photo? = nil
-    
-    var sex: Sex = .empty
-    
-    var name: String {
-        get {
-            return "\(firstName) \(lastName)"
-        }
-    }
+    @objc dynamic var title: String = ""
     
     override class func primaryKey() -> String? {
         return "id"
     }
     
-    convenience init(id: Int, firstName: String, lastName: String, sex: Sex, hasPhoto: Bool, photo: Photo) {
+    convenience init(id: Int, title: String) {
+        self.init()
+        
+        self.id = id
+        self.title = title
+    }
+}
+
+class User: Object, CellModel {
+    // Basic fields
+    @objc dynamic var id: Int = -1
+    @objc dynamic var firstName: String = ""
+    @objc dynamic var lastName: String = ""
+    
+    // Optional fields
+    @objc dynamic var birthDay: String? = nil
+    @objc dynamic var gender: Int = 0
+    @objc dynamic var city: City?
+    @objc dynamic var hasPhoto: Bool = false
+    @objc dynamic var photo: Photo? = nil
+    @objc dynamic var isOnline: Bool = false
+    @objc dynamic var lastSeen: Int = -1
+    
+    // Extra
+    var name: String {
+        get {
+            return "\(firstName) \(lastName)"
+        }
+    }
+    @objc dynamic var order: Int = -1
+    
+    override class func primaryKey() -> String? {
+        return "id"
+    }
+    
+    convenience init(id: Int, firstName: String, lastName: String, gender: Int, hasPhoto: Bool, photo: Photo?, city: City?, isOnline: Bool, birthDay: String?, order: Int, lastSeen: Int) {
         self.init()
         
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
-        self.sex = sex
+        self.gender = gender
         self.hasPhoto = hasPhoto
         self.photo = photo
+        self.city = city
+        self.isOnline = isOnline
+        self.birthDay = birthDay
+        self.order = order
+        self.lastSeen = lastSeen
     }
 }
 
@@ -79,16 +91,24 @@ class FriendList: Decodable {
         case firstName = "first_name"
         case lastName = "last_name"
         case sex
-//        case city
+        case city
+        case online
+        case bdate
         case hasPhoto = "has_photo"
         case photo50 = "photo_50"
         case photo100 = "photo_100"
         case photo200 = "photo_200"
+        case lastSeen = "last_seen"
     }
     
     enum CityCodingKeys: String, CodingKey {
         case id
         case title
+    }
+    
+    enum LastSeenCodingKeys: String, CodingKey {
+        case platform
+        case time
     }
     
     required init(from decoder: Decoder) throws {
@@ -101,27 +121,45 @@ class FriendList: Decodable {
         var items = try values.nestedUnkeyedContainer(forKey: .items)
         
         let itemsCount: Int = items.count ?? 0
-        for _ in 0..<itemsCount {
+        for i in 0..<itemsCount {
             let friendContainer = try items.nestedContainer(keyedBy: FriendCodingKeys.self)
+            // Basic fields
             let id = try friendContainer.decode(Int.self, forKey: .id)
             let firstName = try friendContainer.decode(String.self, forKey: .firstName)
             let lastName = try friendContainer.decode(String.self, forKey: .lastName)
-            let sexInt = try friendContainer.decode(Int.self, forKey: .sex)
-            let hasPhotoInt = try friendContainer.decode(Int.self, forKey: .hasPhoto)
-            let hasPhotoBool = hasPhotoInt == 0 ? false : true
-            let photo50 = try friendContainer.decode(String.self, forKey: .photo50)
-            let photo100 = try friendContainer.decode(String.self, forKey: .photo100)
-            let photo200 = try friendContainer.decode(String.self, forKey: .photo200)
             
-//            let cityContainer = try friendContainer.nestedContainer(keyedBy: CityCodingKeys.self, forKey: .city)
-//            let cityID = try cityContainer.decode(Int.self, forKey: .id)
-//            let cityTitle = try cityContainer.decode(String.self, forKey: .title)
-
-            let photo = Photo(photo_50: photo50, photo_100: photo100, photo_200: photo200)
-//            let city = City(id: cityID, title: cityTitle)
-            let sex = Sex(rawValue: sexInt) ?? .empty
-//            let friend = User(id: id, firstName: firstName, lastName: lastName, sex: sex, city: city, hasPhoto: hasPhotoBool, photo: photo)
-            let friend = User(id: id, firstName: firstName, lastName: lastName, sex: sex, hasPhoto: hasPhotoBool, photo: photo)
+            // Optional fields
+            let sexInt = try? friendContainer.decode(Int.self, forKey: .sex)
+            let sex: Int = sexInt ?? 0
+            
+            let birthDayString = try? friendContainer.decode(String.self, forKey: .bdate)
+            
+            let hasPhotoInt = try? friendContainer.decode(Int.self, forKey: .hasPhoto)
+            let hasPhotoBool = hasPhotoInt == 0 ? false : true
+            
+            let isOnlineInt = try? friendContainer.decode(Int.self, forKey: .online)
+            let isOnlineBool = isOnlineInt == 0 ? false : true
+            
+            var city: City?
+            let cityContainer = try? friendContainer.nestedContainer(keyedBy: CityCodingKeys.self, forKey: .city)
+            if let cityContainer = cityContainer {
+                let cityID = try cityContainer.decode(Int.self, forKey: .id)
+                let cityTitle = try cityContainer.decode(String.self, forKey: .title)
+                city = City(id: cityID, title: cityTitle)
+            }
+            
+            let photo50 = try? friendContainer.decode(String.self, forKey: .photo50)
+            let photo100 = try? friendContainer.decode(String.self, forKey: .photo100)
+            let photo200 = try? friendContainer.decode(String.self, forKey: .photo200)
+            let photo = Photo(photo_50: photo50 ?? "", photo_100: photo100 ?? "", photo_200: photo200 ?? "")
+            
+            let lastSeenContainer = try? friendContainer.nestedContainer(keyedBy: LastSeenCodingKeys.self, forKey: .lastSeen)
+            var lastSeen: Int = -1
+            if let lastSeenContainer = lastSeenContainer {
+                lastSeen = try lastSeenContainer.decode(Int.self, forKey: .time)
+            }
+            
+            let friend = User(id: id, firstName: firstName, lastName: lastName, gender: sex, hasPhoto: hasPhotoBool, photo: photo, city: city, isOnline: isOnlineBool, birthDay: birthDayString, order: i, lastSeen: lastSeen)
             
             self.friends.append(friend)
         }

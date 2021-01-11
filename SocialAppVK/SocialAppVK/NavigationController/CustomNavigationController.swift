@@ -15,6 +15,11 @@ class CustomNavigationController: UINavigationController, UINavigationController
         super.viewDidLoad()
 
         self.delegate = self
+        
+        navigationBar.backgroundColor = Colors.background
+        navigationBar.barTintColor = Colors.background
+        navigationBar.tintColor = Colors.brand
+        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Colors.brand]
     }
     
 

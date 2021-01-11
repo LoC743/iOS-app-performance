@@ -20,7 +20,7 @@ class GroupSearchTableViewController: UITableViewController, UISearchBarDelegate
 
         tableView.register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
         
-        view.backgroundColor = Colors.palePurplePantone
+        view.backgroundColor = Colors.background
     }
 
     // MARK: - Table view data source
@@ -40,13 +40,13 @@ class GroupSearchTableViewController: UITableViewController, UISearchBarDelegate
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath) as! CustomTableViewCell
         
-        cell.setValues(item: groups[indexPath.row])
+        cell.setGroupCell(group: groups[indexPath.row])
 
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "GroupsCollectionViewController") as! GroupsCollectionViewController
+        let vc = GroupProfileViewController(nibName: "GroupProfileViewController", bundle: nil)
         
         let group = groups[indexPath.row]
         
