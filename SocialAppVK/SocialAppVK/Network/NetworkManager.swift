@@ -61,6 +61,27 @@ class NetworkManager {
         }
     }
     
+    func loadFriendListOperation(count: Int, offset: Int) -> DataRequest? {
+        guard let token = UserSession.instance.token,
+              let userID = UserSession.instance.userID else { return nil }
+        
+        let path = Paths.friends.rawValue
+        
+        let parameters: Parameters = [
+            "user_id": userID,
+            "access_token": token,
+            "v": versionVKAPI,
+            "fields": "bdate, city, sex, has_photo, photo_50, photo_100, photo_200, online, last_seen",
+            "count": count,
+            "offset": offset,
+            "order": "hints"
+        ]
+        
+        let url = baseURL + path
+        
+        return Session.custom.request(url, parameters: parameters)
+    }
+    
     @discardableResult
     func getPhotos(ownerID: String, count: Int, offset: Int, type: PhotoAlbum, completion: @escaping (ImageList?) -> Void, failure: @escaping () -> Void) -> Request? {
         guard let token = UserSession.instance.token else { return nil }
