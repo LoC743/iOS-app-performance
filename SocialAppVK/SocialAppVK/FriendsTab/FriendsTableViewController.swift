@@ -21,6 +21,8 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     
     var operationQueue = OperationQueue()
     
+    private var photoService: PhotoService?
+    
     private let reuseIdentifier = "CustomTableViewCell"
 
     override func viewDidLoad() {
@@ -32,6 +34,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         
         view.backgroundColor = Colors.background
         tableView.sectionIndexBackgroundColor = Colors.background
+        photoService = PhotoService(container: tableView)
         setupRefreshControl()
         
 //        getUserData()
@@ -142,7 +145,6 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! CustomTableViewCell
         
-        
         var user: User?
         if indexPath.section == 0 {
             user = importantFriends[indexPath.row]
@@ -153,7 +155,10 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         guard let userToSet = user else { return UITableViewCell() }
 
         cell.setFriendCell(friend: userToSet)
-
+        if let photoURLs = userToSet.photo {
+            cell.avatarView.imageView.image = photoService?.photo(atIndexpath: indexPath, byUrl: photoURLs.photo_200)
+        }
+        
         return cell
     }
     

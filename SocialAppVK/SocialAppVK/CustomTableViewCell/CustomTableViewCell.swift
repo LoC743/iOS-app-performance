@@ -60,7 +60,9 @@ class CustomTableViewCell: UITableViewCell {
     
     func setFriendCell(friend: User) {
         setStatusLabel(friend)
-        setValues(item: friend)
+//        setValues(item: friend) // OLD
+        
+        nameLabel.text = friend.name // NEW
     }
      
     func setGroupCell(group: Group) {
