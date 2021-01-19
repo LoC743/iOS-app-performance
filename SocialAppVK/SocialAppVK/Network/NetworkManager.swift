@@ -6,6 +6,7 @@
 //
 
 import Alamofire
+import PromiseKit
 
 enum PhotoAlbum: String {
     case wall
@@ -142,6 +143,39 @@ class NetworkManager {
             
             completion(groupList)
         }
+    }
+    
+    func loadGroupsListPromise(count: Int, offset: Int) -> Promise<[Group]>? {
+        guard let token = UserSession.instance.token,
+              let userID = UserSession.instance.userID else { return nil }
+        
+        let path = Paths.groups.rawValue
+        
+        let parameters: Parameters = [
+            "user_id": userID,
+            "access_token": token,
+            "v": versionVKAPI,
+            "extended": 1,
+            "count": count,
+            "offset": offset
+        ]
+        
+        let url = baseURL + path
+        
+        let promise = Promise<[Group]> { resolver in
+            Session.custom.request(url, parameters: parameters).responseData { response in
+                guard let data = response.value,
+                      let groupList = try? JSONDecoder().decode(GroupList.self, from: data)
+                else {
+                    resolver.reject(GroupsError.parseError(message: "Group parse error!"))
+                    return
+                }
+                
+                resolver.fulfill(groupList.groups)
+            }
+        }
+        
+        return promise
     }
     
     @discardableResult
