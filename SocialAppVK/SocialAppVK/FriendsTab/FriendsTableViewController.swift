@@ -19,6 +19,8 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     var importantFriends: [User] = []
     var otherFriends: [User] = []
     
+    var operationQueue = OperationQueue()
+    
     private let reuseIdentifier = "CustomTableViewCell"
 
     override func viewDidLoad() {
@@ -32,7 +34,24 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         tableView.sectionIndexBackgroundColor = Colors.background
         setupRefreshControl()
         
-        getUserData()
+//        getUserData()
+        loadFriendDataWithOperation()
+    }
+    
+    private func loadFriendDataWithOperation() {
+        guard let request = NetworkManager.shared.loadFriendListOperation(count: 0, offset: 0)  else { return }
+        operationQueue.qualityOfService = .utility
+        
+        loadDatabaseData()
+        
+        let getDataOperation = GetDataOperation(request: request)
+        let parseOperation = ParseUserDataOperation()
+        parseOperation.addDependency(getDataOperation)
+        let reloadDataOperation = ReloadTableDataOperation(controller: self)
+        reloadDataOperation.addDependency(parseOperation)
+        operationQueue.addOperation(getDataOperation)
+        operationQueue.addOperation(parseOperation)
+        OperationQueue.main.addOperation(reloadDataOperation)
     }
     
     private func setupRefreshControl() {
@@ -51,7 +70,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
            }
     }
     
-    private func resetTableData() {
+    func resetTableData() {
         sections = ["Важные", "Все"]
         importantFriends = []
         otherFriends = []
@@ -76,7 +95,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         self.tableView.reloadData()
     }
     
-    private func getUserData() {
+    private func loadDatabaseData() {
         self.friendsData = DatabaseManager.shared.loadUserData()
         
         resetTableData()
@@ -94,8 +113,6 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
                 print("Error in \(#function). Message: \(error.localizedDescription)")
             }
         })
-        
-        loadFriendList() // Load new data anyways
     }
     
     private func loadFriendList() {

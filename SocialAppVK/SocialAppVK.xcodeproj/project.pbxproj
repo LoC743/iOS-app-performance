@@ -16,6 +16,7 @@
 		8A25FDBE25334F5400AF98F1 /* CustomAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A25FDBD25334F5400AF98F1 /* CustomAvatarView.swift */; };
 		8A3E6DAF2525E50B00766A2E /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3E6DAE2525E50B00766A2E /* TabBarController.swift */; };
 		8A4C2AB825418E3C00DE263F /* PhotoViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4C2AB725418E3C00DE263F /* PhotoViewerViewController.swift */; };
+		8A7887F825AF11490094AEE0 /* LoadUserDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7887F725AF11490094AEE0 /* LoadUserDataOperation.swift */; };
 		8A788B3A25A5B51E00614B7D /* GroupProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A788B3825A5B51E00614B7D /* GroupProfileViewController.swift */; };
 		8A788B3B25A5B51E00614B7D /* GroupProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A788B3925A5B51E00614B7D /* GroupProfileViewController.xib */; };
 		8A788B3F25A5B6A400614B7D /* GroupImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A788B3D25A5B6A400614B7D /* GroupImageCollectionViewCell.swift */; };
@@ -43,6 +44,10 @@
 		8AB781BB2539C51A007AE4B2 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB781B92539C51A007AE4B2 /* NewsTableViewCell.swift */; };
 		8AB781BC2539C51A007AE4B2 /* NewsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AB781BA2539C51A007AE4B2 /* NewsTableViewCell.xib */; };
 		8ABAE8F725711740008F11A4 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABAE8F625711740008F11A4 /* DatabaseManager.swift */; };
+		8AC1AB8425AF0252000D23B9 /* GetDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1AB8325AF0252000D23B9 /* GetDataOperation.swift */; };
+		8AC1AB8725AF026D000D23B9 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1AB8625AF026D000D23B9 /* AsyncOperation.swift */; };
+		8AC1AB8A25AF02EA000D23B9 /* ParseUserDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1AB8925AF02EA000D23B9 /* ParseUserDataOperation.swift */; };
+		8AC1AB8E25AF0402000D23B9 /* ReloadTableDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1AB8D25AF0402000D23B9 /* ReloadTableDataOperation.swift */; };
 		8AC50BE12567C47C00BB808C /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC50BE02567C47C00BB808C /* UserSession.swift */; };
 		8AC50BE42567C4C700BB808C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC50BE32567C4C700BB808C /* NetworkManager.swift */; };
 		8AC50BE82567C5C300BB808C /* CustomAlomafireSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC50BE72567C5C300BB808C /* CustomAlomafireSession.swift */; };
@@ -69,6 +74,7 @@
 		8A25FDBD25334F5400AF98F1 /* CustomAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAvatarView.swift; sourceTree = "<group>"; };
 		8A3E6DAE2525E50B00766A2E /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8A4C2AB725418E3C00DE263F /* PhotoViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerViewController.swift; sourceTree = "<group>"; };
+		8A7887F725AF11490094AEE0 /* LoadUserDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadUserDataOperation.swift; sourceTree = "<group>"; };
 		8A788B3825A5B51E00614B7D /* GroupProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupProfileViewController.swift; sourceTree = "<group>"; };
 		8A788B3925A5B51E00614B7D /* GroupProfileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupProfileViewController.xib; sourceTree = "<group>"; };
 		8A788B3D25A5B6A400614B7D /* GroupImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -98,6 +104,10 @@
 		8AB781B92539C51A007AE4B2 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		8AB781BA2539C51A007AE4B2 /* NewsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTableViewCell.xib; sourceTree = "<group>"; };
 		8ABAE8F625711740008F11A4 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		8AC1AB8325AF0252000D23B9 /* GetDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDataOperation.swift; sourceTree = "<group>"; };
+		8AC1AB8625AF026D000D23B9 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
+		8AC1AB8925AF02EA000D23B9 /* ParseUserDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseUserDataOperation.swift; sourceTree = "<group>"; };
+		8AC1AB8D25AF0402000D23B9 /* ReloadTableDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReloadTableDataOperation.swift; sourceTree = "<group>"; };
 		8AC50BE02567C47C00BB808C /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
 		8AC50BE32567C4C700BB808C /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		8AC50BE72567C5C300BB808C /* CustomAlomafireSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlomafireSession.swift; sourceTree = "<group>"; };
@@ -218,6 +228,7 @@
 				8AC50C02256D3C8E00BB808C /* Images.swift */,
 				8A90D18B25838224005703FC /* CurrentUser.swift */,
 				8A1BCF80258A1CF9008DAD90 /* Feed.swift */,
+				8AC1AB8925AF02EA000D23B9 /* ParseUserDataOperation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -233,6 +244,7 @@
 				8AE4267125A341B0003FEB87 /* UserProfileViewController.xib */,
 				8AE4267825A3444C003FEB87 /* UserImageCollectionViewCell.swift */,
 				8AE4267925A3444C003FEB87 /* UserImageCollectionViewCell.xib */,
+				8AC1AB8D25AF0402000D23B9 /* ReloadTableDataOperation.swift */,
 			);
 			path = FriendsTab;
 			sourceTree = "<group>";
@@ -266,6 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				8ABAE8F625711740008F11A4 /* DatabaseManager.swift */,
+				8A7887F725AF11490094AEE0 /* LoadUserDataOperation.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -275,6 +288,8 @@
 			children = (
 				8AC50BE32567C4C700BB808C /* NetworkManager.swift */,
 				8AC50BE72567C5C300BB808C /* CustomAlomafireSession.swift */,
+				8AC1AB8325AF0252000D23B9 /* GetDataOperation.swift */,
+				8AC1AB8625AF026D000D23B9 /* AsyncOperation.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -423,6 +438,7 @@
 				8AC50BFC256D0BFA00BB808C /* Photo.swift in Sources */,
 				8A9A175225223E94003E44BC /* LoginFormViewController.swift in Sources */,
 				8AA99CDB252B2C1D00A05F86 /* Colors.swift in Sources */,
+				8AC1AB8E25AF0402000D23B9 /* ReloadTableDataOperation.swift in Sources */,
 				8AE4267A25A3444C003FEB87 /* UserImageCollectionViewCell.swift in Sources */,
 				8AC50BE82567C5C300BB808C /* CustomAlomafireSession.swift in Sources */,
 				8A1BCF81258A1CF9008DAD90 /* Feed.swift in Sources */,
@@ -438,10 +454,13 @@
 				8A90D18C25838224005703FC /* CurrentUser.swift in Sources */,
 				8A788B3F25A5B6A400614B7D /* GroupImageCollectionViewCell.swift in Sources */,
 				8A184F8125332C02004A002E /* CustomTableViewCell.swift in Sources */,
+				8AC1AB8A25AF02EA000D23B9 /* ParseUserDataOperation.swift in Sources */,
 				8AA99CD1252B1EDE00A05F86 /* Group.swift in Sources */,
 				8AB781B72539C4F6007AE4B2 /* NewsTableViewController.swift in Sources */,
 				8AE4268225A3459A003FEB87 /* HeaderSectionCollectionReusableView.swift in Sources */,
 				8A184F8725332D8B004A002E /* GroupSearchTableViewController.swift in Sources */,
+				8AC1AB8725AF026D000D23B9 /* AsyncOperation.swift in Sources */,
+				8A7887F825AF11490094AEE0 /* LoadUserDataOperation.swift in Sources */,
 				8AC50BE12567C47C00BB808C /* UserSession.swift in Sources */,
 				8A9A173C25223748003E44BC /* AppDelegate.swift in Sources */,
 				8AC50C03256D3C8E00BB808C /* Images.swift in Sources */,
@@ -453,6 +472,7 @@
 				8AA99CCE252B1ED800A05F86 /* User.swift in Sources */,
 				8ABAE8F725711740008F11A4 /* DatabaseManager.swift in Sources */,
 				8AC50BE42567C4C700BB808C /* NetworkManager.swift in Sources */,
+				8AC1AB8425AF0252000D23B9 /* GetDataOperation.swift in Sources */,
 				8A81F3CA254842270093C4F7 /* PopAnimation.swift in Sources */,
 				8A788B3A25A5B51E00614B7D /* GroupProfileViewController.swift in Sources */,
 				8AF30355253D9D1D0085F4C8 /* LoadingView.swift in Sources */,
