@@ -29,7 +29,7 @@ class GroupsTableViewController: UITableViewController {
         
         setupLoadingView()
         
-        tableView.register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "CustomTableViewCell")
         
         view.backgroundColor = Colors.background
         

@@ -30,7 +30,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         
         searchBar.delegate = self
         
-        tableView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         
         view.backgroundColor = Colors.background
         tableView.sectionIndexBackgroundColor = Colors.background
@@ -145,6 +145,12 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! CustomTableViewCell
         
+        configureCell(cell: cell, indexPath: indexPath)
+        
+        return cell
+    }
+    
+    private func configureCell(cell: CustomTableViewCell, indexPath: IndexPath) {
         var user: User?
         if indexPath.section == 0 {
             user = importantFriends[indexPath.row]
@@ -152,14 +158,12 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             user = otherFriends[indexPath.row]
         }
         
-        guard let userToSet = user else { return UITableViewCell() }
+        guard let userToSet = user else { return }
 
         cell.setFriendCell(friend: userToSet)
         if let photoURLs = userToSet.photo {
             cell.avatarView.imageView.image = photoService?.photo(atIndexpath: indexPath, byUrl: photoURLs.photo_200)
         }
-        
-        return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -182,7 +186,6 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         vc.getImages(user: userToSet)
         
         self.navigationController?.pushViewController(vc, animated: true)
-
     }
     
     // MARK: - Custom Section View
