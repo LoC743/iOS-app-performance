@@ -20,6 +20,7 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var repostButton: UIButton!
     
+    @IBOutlet weak var viewsImageView: UIImageView!
     @IBOutlet weak var viewsCountLabel: UILabel!
     
     private var post: News?
@@ -41,25 +42,33 @@ class NewsTableViewCell: UITableViewCell {
         setupDateLabel()
         setupPostImageView()
         setupTextLabel()
+        setupLikeButton()
+        setupCommentButton()
+        setupRepostButton()
+        setupViewsCountLabel()
     }
     
     private func setupAvatarImageView() {
         avatarImageView.contentMode = .scaleAspectFill
+        avatarImageView.backgroundColor = Colors.background
         avatarImageView.layer.cornerRadius = avatarImageView.frame.height / 2
     }
     
     private func setupNameLabel() {
         nameLabel.textColor = Colors.text
+        nameLabel.backgroundColor = Colors.background
         nameLabel.font = .systemFont(ofSize: 15, weight: .semibold)
     }
     
     private func setupDateLabel() {
         postDateLabel.textColor = Colors.text
+        postDateLabel.backgroundColor = Colors.background
         postDateLabel.font = .systemFont(ofSize: 13, weight: .light)
     }
     
     private func setupPostImageView() {
         postImageView.contentMode = .scaleAspectFit
+        postImageView.backgroundColor = Colors.background
     }
     
     private func setupTextLabel() {
@@ -67,6 +76,23 @@ class NewsTableViewCell: UITableViewCell {
         postTextLabel.textColor = Colors.text
         postTextLabel.backgroundColor = Colors.background
         postTextLabel.font = .systemFont(ofSize: 14)
+    }
+    
+    private func setupLikeButton() {
+        likeButton.backgroundColor = Colors.background
+    }
+    
+    private func setupCommentButton() {
+        commentButton.backgroundColor = Colors.background
+    }
+    
+    private func setupRepostButton() {
+        repostButton.backgroundColor = Colors.background
+    }
+    
+    private func setupViewsCountLabel() {
+        viewsImageView.backgroundColor = Colors.background
+        viewsCountLabel.backgroundColor = Colors.background
     }
     
     private func getStringFromDate(_ unixTimestamp: Int) -> String {

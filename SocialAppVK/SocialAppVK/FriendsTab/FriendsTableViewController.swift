@@ -28,7 +28,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBar.delegate = self
+        setupSearchBar()
         
         tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         
@@ -199,6 +199,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
 
         let sectionLabelFrame: CGRect = CGRect(x: 15, y: 0, width: 100, height: viewHeight/2)
         let sectionLabel = UILabel(frame: sectionLabelFrame)
+        sectionLabel.backgroundColor = Colors.background
         sectionLabel.textAlignment = .left
         sectionLabel.font = .systemFont(ofSize: 16)
         sectionLabel.textColor = Colors.brand
@@ -207,6 +208,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         if section == 1 {
             let numberOfFirendsFrame: CGRect = CGRect(x: 50, y: 0, width: 100, height: viewHeight/2)
             let numberOfFirendsLabel = UILabel(frame: numberOfFirendsFrame)
+            numberOfFirendsLabel.backgroundColor = Colors.background
             numberOfFirendsLabel.textAlignment = .left
             numberOfFirendsLabel.font = .systemFont(ofSize: 14)
             numberOfFirendsLabel.textColor = .gray
@@ -235,6 +237,11 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     // MARK: - SearchBar setup
+    
+    func setupSearchBar() {
+        searchBar.delegate = self
+        searchBar.barTintColor = Colors.background
+    }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         sections = ["Поиск"]

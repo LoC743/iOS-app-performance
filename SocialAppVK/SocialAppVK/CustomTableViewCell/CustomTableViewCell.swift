@@ -44,6 +44,7 @@ class CustomTableViewCell: UITableViewCell {
             height: 55)
         
         avatarView.frame = avatarViewFrame
+        avatarView.backgroundColor = Colors.background
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.avatarViewTapped(_:)))
         avatarView.addGestureRecognizer(tap)
@@ -65,6 +66,7 @@ class CustomTableViewCell: UITableViewCell {
             height: 17)
         
         nameLabel.frame = nameLabelFrame
+        nameLabel.backgroundColor = Colors.background
         nameLabel.font = .systemFont(ofSize: 14, weight: .semibold)
     }
     
@@ -78,6 +80,7 @@ class CustomTableViewCell: UITableViewCell {
             height: 16)
         
         statusLabel.frame = statusLabelFrame
+        statusLabel.backgroundColor = Colors.background
         statusLabel.font = .systemFont(ofSize: 13, weight: .light)
     }
 
