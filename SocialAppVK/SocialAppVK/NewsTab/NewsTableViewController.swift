@@ -22,6 +22,8 @@ class NewsTableViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 600
         tableView.backgroundColor = Colors.background
+        
+        setupRefreshControl()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -34,6 +36,22 @@ class NewsTableViewController: UITableViewController {
     
     @objc func topButtonTapped() {
         tableView.setContentOffset(.zero, animated: true)
+    }
+    
+    private func setupRefreshControl() {
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.tintColor = Colors.brand
+        tableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+    }
+    
+    @objc func handleRefreshControl() {
+        loadNews()
+        tableView.reloadData()
+
+        // Dismiss the refresh control.
+           DispatchQueue.main.async {
+              self.tableView.refreshControl?.endRefreshing()
+           }
     }
     
     private func loadNews() {
