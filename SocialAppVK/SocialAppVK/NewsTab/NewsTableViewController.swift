@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class NewsTableViewController: UITableViewController {
     
@@ -13,25 +14,24 @@ class NewsTableViewController: UITableViewController {
     
     var newsArray: [News] = []
     var groups: [Group] = []
+    var nextFrom = ""
+    var isLoading = false
+    var request: Request?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.prefetchDataSource = self
 
         tableView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellReuseIdentifier: reuseIdentifier)
         
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 600
         tableView.backgroundColor = Colors.background
-        
-        setupRefreshControl()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "To Top", style: .plain, target: self, action: #selector(topButtonTapped))
         
-        loadNews()
+        setupRefreshControl()
+        loadNews(completion: {})
     }
     
     @objc func topButtonTapped() {
@@ -45,21 +45,39 @@ class NewsTableViewController: UITableViewController {
     }
     
     @objc func handleRefreshControl() {
-        loadNews()
-        tableView.reloadData()
+        loadNews() { [weak self] in
+            guard let self = self else { return }
+            self.tableView.reloadData()
 
-        // Dismiss the refresh control.
-           DispatchQueue.main.async {
-              self.tableView.refreshControl?.endRefreshing()
-           }
+            // Dismiss the refresh control.
+               DispatchQueue.main.async {
+                  self.tableView.refreshControl?.endRefreshing()
+               }
+        }
+
     }
     
-    private func loadNews() {
-        NetworkManager.shared.loadFeed(count: 20) { [weak self] (feedResponse) in
+    private func loadNews(completion: @escaping () -> Void) {
+        self.request = NetworkManager.shared.loadFeed(count: 10, from: "") { [weak self] (feedResponse) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.newsArray = feedResponse.newsArray
                 self.groups = feedResponse.groups
+                self.nextFrom = feedResponse.nextFrom
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func loadNextNews() {
+        print(#function)
+        self.request = NetworkManager.shared.loadFeed(count: 6, from: nextFrom) { [weak self] (feedResponse) in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.newsArray += feedResponse.newsArray
+                self.groups += feedResponse.groups
+                self.nextFrom = feedResponse.nextFrom
+                self.isLoading = false
                 self.tableView.reloadData()
             }
         }
@@ -104,4 +122,20 @@ class NewsTableViewController: UITableViewController {
             cell.alpha = 1.0
         }
     }
+}
+
+extension NewsTableViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        if !isLoading {
+            isLoading = true
+            loadNextNews()
+        }
+    }
+
+    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        if isLoading {
+            self.request?.cancel()
+        }
+    }
+    
 }

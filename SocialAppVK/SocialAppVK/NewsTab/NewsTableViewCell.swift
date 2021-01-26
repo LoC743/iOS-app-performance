@@ -143,7 +143,14 @@ class NewsTableViewCell: UITableViewCell {
         postDateLabel.text = getStringFromDate(item.date)
         
         postTextLabel.text = item.text
-        postTextLabel.sizeToFit()
+        if postTextLabel.text!.count > 200 {
+           let readmoreFont = UIFont(name: "Helvetica-Oblique", size: 11.0)
+            let readmoreFontColor = UIColor.blue
+            DispatchQueue.main.async {
+                self.postTextLabel.addTrailing(with: "... ", moreText: "Readmore", moreTextFont: readmoreFont!, moreTextColor: readmoreFontColor)
+            }
+        }
+        
         setPostImage(url: item.photoURL)
         
         likeButton.setTitle(String(item.likesCount), for: .normal)
