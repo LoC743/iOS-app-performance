@@ -105,6 +105,7 @@ class NewsTableViewController: UITableViewController {
         }
         
         cell.setValues(item: newsPost, group: groupToSet)
+        cell.mainScreen = self
 
         return cell
     }

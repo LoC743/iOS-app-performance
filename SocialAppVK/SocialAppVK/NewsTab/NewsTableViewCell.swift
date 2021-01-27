@@ -27,6 +27,8 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var moreButton: UIButton!
     var isExpanded: Bool = false
     
+    var mainScreen: NewsTableViewController?
+    
     private var post: News?
     
     private let likeImage = UIImage(systemName: "heart.fill")!
@@ -78,6 +80,26 @@ class NewsTableViewCell: UITableViewCell {
 //        postImageView.contentMode = .scaleAspectFit
         postImageView.clipsToBounds = true
         postImageView.backgroundColor = Colors.background
+        
+        let imageTapped = UITapGestureRecognizer(target: self, action: #selector(handleImageTapped))
+        postImageView.isUserInteractionEnabled = true
+        postImageView.addGestureRecognizer(imageTapped)
+    }
+    
+    @objc func handleImageTapped() {
+        print(#function)
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "PhotoViewerViewController") as! PhotoViewerViewController
+        
+        guard let post = post,
+              let photo = post.photo,
+              let main = mainScreen else { return }
+        print("In")
+        let vkImage = VKImage(url: photo.url, height: photo.height, width: photo.width)
+        let image = Image(vkImage: vkImage)
+        
+        vc.getPhotosData(photos: [image], currentIndex: 0)
+        
+        main.navigationController?.pushViewController(vc, animated: true)
     }
     
     private func setupTextLabel() {

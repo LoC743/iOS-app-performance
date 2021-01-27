@@ -62,6 +62,12 @@ class Image: Object {
         self.photo200 = photo200
     }
     
+    convenience init(vkImage: VKImage) {
+        self.init()
+        
+        self.photo200 = vkImage
+    }
+    
     override class func primaryKey() -> String? {
         return "id"
     }
