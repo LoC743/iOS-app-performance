@@ -25,8 +25,7 @@ class NewsTableViewController: UITableViewController {
 
         tableView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellReuseIdentifier: reuseIdentifier)
         
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 600
+//        tableView.rowHeight = UITableView.automaticDimension
         tableView.backgroundColor = Colors.background
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "To Top", style: .plain, target: self, action: #selector(topButtonTapped))
         
@@ -58,7 +57,7 @@ class NewsTableViewController: UITableViewController {
     }
     
     private func loadNews(completion: @escaping () -> Void) {
-        self.request = NetworkManager.shared.loadFeed(count: 10, from: "") { [weak self] (feedResponse) in
+        self.request = NetworkManager.shared.loadFeed(count: 25, from: "") { [weak self] (feedResponse) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.newsArray = feedResponse.newsArray
@@ -71,7 +70,7 @@ class NewsTableViewController: UITableViewController {
     
     private func loadNextNews() {
         print(#function)
-        self.request = NetworkManager.shared.loadFeed(count: 6, from: nextFrom) { [weak self] (feedResponse) in
+        self.request = NetworkManager.shared.loadFeed(count: 15, from: nextFrom) { [weak self] (feedResponse) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.newsArray += feedResponse.newsArray
@@ -121,6 +120,17 @@ class NewsTableViewController: UITableViewController {
             cell.transform = .identity
             cell.alpha = 1.0
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let tableWidth = tableView.bounds.width
+        let news = self.newsArray[indexPath.section]
+        
+        if let photo = news.photo {
+            let cellHeight = tableWidth * photo.aspectRatio
+            return cellHeight
+        }
+        return UITableView.automaticDimension
     }
 }
 

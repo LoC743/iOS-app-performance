@@ -151,7 +151,9 @@ class NewsTableViewCell: UITableViewCell {
             }
         }
         
-        setPostImage(url: item.photoURL)
+        if let photo = item.photo {
+            setPostImage(url: photo.url)
+        }
         
         likeButton.setTitle(String(item.likesCount), for: .normal)
         repostButton.setTitle(String(item.repostsCount), for: .normal)

@@ -18,6 +18,8 @@ class VKImage: Object {
     @objc dynamic var width: Int = 0
     @objc dynamic var url: String = ""
     
+    var aspectRatio: CGFloat { return CGFloat(height)/CGFloat(width) }
+    
     convenience init(url: String, height: Int, width: Int) {
         self.init()
         

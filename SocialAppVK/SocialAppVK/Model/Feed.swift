@@ -11,20 +11,20 @@ class News: Object {
     @objc dynamic var sourceID: Int = -1
     @objc dynamic var text: String = ""
     @objc dynamic var date: Int = -1
-    @objc dynamic var photoURL: String = ""
+    @objc dynamic var photo: VKImage?
     @objc dynamic var commentCount: Int = -1
     @objc dynamic var likesCount: Int = -1
     @objc dynamic var isUserLikes: Bool = false
     @objc dynamic var repostsCount: Int = -1
     @objc dynamic var viewsCount: Int = -1
     
-    convenience init(sourceID: Int, text: String, date: Int, photoURL: String, commentCount: Int, likesCount: Int, isUserLikes: Bool, repostsCount: Int, viewsCount: Int) {
+    convenience init(sourceID: Int, text: String, date: Int, photo: VKImage, commentCount: Int, likesCount: Int, isUserLikes: Bool, repostsCount: Int, viewsCount: Int) {
         self.init()
         
         self.sourceID = sourceID
         self.text = text
         self.date = date
-        self.photoURL = photoURL
+        self.photo = photo
         self.commentCount = commentCount
         self.likesCount = likesCount
         self.isUserLikes = isUserLikes
@@ -88,6 +88,8 @@ class Feed: Decodable {
     
     enum SizesCodingKeys: String, CodingKey {
         case url
+        case width
+        case height
     }
     
     enum GroupCodingKeys: String, CodingKey {
@@ -182,12 +184,15 @@ class Feed: Decodable {
                         for z in 0..<sizesCount {
                             let sizeContainer = try! sizes.nestedContainer(keyedBy: SizesCodingKeys.self)
                             let url = try! sizeContainer.decode(String.self, forKey: .url)
+                            let width = try! sizeContainer.decode(Int.self, forKey: .width)
+                            let height = try! sizeContainer.decode(Int.self, forKey: .height)
 
                             if z == sizesCount-1 {
+                                let photo = VKImage(url: url, height: height, width: width)
                                 let news = News(sourceID: sourceID,
                                                 text: text ?? "",
                                                 date: date,
-                                                photoURL: url,
+                                                photo: photo,
                                                 commentCount: commentsCount ?? 0,
                                                 likesCount: likesCount,
                                                 isUserLikes: isUserLikesBool,
