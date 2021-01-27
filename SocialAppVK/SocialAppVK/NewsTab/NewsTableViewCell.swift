@@ -25,7 +25,7 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var viewsCountLabel: UILabel!
     
     @IBOutlet weak var moreButton: UIButton!
-    private var isExpanded: Bool = false
+    var isExpanded: Bool = false
     
     private var post: News?
     
@@ -76,6 +76,7 @@ class NewsTableViewCell: UITableViewCell {
     
     private func setupPostImageView() {
 //        postImageView.contentMode = .scaleAspectFit
+        postImageView.clipsToBounds = true
         postImageView.backgroundColor = Colors.background
     }
     
@@ -215,14 +216,10 @@ class NewsTableViewCell: UITableViewCell {
         if labelSize.height > maxHeight && text.count > 1 {
             textHeightConstraint = postTextLabel.heightAnchor.constraint(equalToConstant: 100)
             textHeightConstraint?.isActive = true
-            moreButton.frame = CGRect(x: postTextLabel.frame.minX,
-                                      y: postTextLabel.frame.maxY + 10,
-                                      width: 35,
-                                      height: 16)
             moreButton.isHidden = false
         } else {
+            textHeightConstraint?.isActive = false
             moreButton.isHidden = true
-            postTextLabel.heightAnchor.constraint(equalToConstant: maxHeight).isActive = false
         }
     }
 

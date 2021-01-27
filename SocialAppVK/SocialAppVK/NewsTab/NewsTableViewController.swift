@@ -131,6 +131,12 @@ class NewsTableViewController: UITableViewController {
         }
         return UITableView.automaticDimension
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+    }
 }
 
 extension NewsTableViewController: UITableViewDataSourcePrefetching {
