@@ -14,6 +14,7 @@ class NewsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var postDateLabel: UILabel!
     @IBOutlet weak var postTextLabel: UILabel!
+    var textHeightConstraint: NSLayoutConstraint?
     @IBOutlet weak var postImageView: UIImageView!
     
     @IBOutlet weak var likeButton: UIButton!
@@ -22,6 +23,9 @@ class NewsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var viewsImageView: UIImageView!
     @IBOutlet weak var viewsCountLabel: UILabel!
+    
+    @IBOutlet weak var moreButton: UIButton!
+    private var isExpanded: Bool = false
     
     private var post: News?
     
@@ -46,6 +50,10 @@ class NewsTableViewCell: UITableViewCell {
         setupCommentButton()
         setupRepostButton()
         setupViewsCountLabel()
+        setupMoreButton()
+        
+        textHeightConstraint?.isActive = false
+        isExpanded = false
     }
     
     private func setupAvatarImageView() {
@@ -67,7 +75,7 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     private func setupPostImageView() {
-        postImageView.contentMode = .scaleAspectFit
+//        postImageView.contentMode = .scaleAspectFit
         postImageView.backgroundColor = Colors.background
     }
     
@@ -75,6 +83,7 @@ class NewsTableViewCell: UITableViewCell {
         postTextLabel.textAlignment = .natural
         postTextLabel.textColor = Colors.text
         postTextLabel.backgroundColor = Colors.background
+        postTextLabel.numberOfLines = 0
         postTextLabel.font = .systemFont(ofSize: 14)
     }
     
@@ -93,6 +102,13 @@ class NewsTableViewCell: UITableViewCell {
     private func setupViewsCountLabel() {
         viewsImageView.backgroundColor = Colors.background
         viewsCountLabel.backgroundColor = Colors.background
+    }
+    
+    private func setupMoreButton() {
+        moreButton.isHidden = true
+        moreButton.setTitle("Show more", for: .normal)
+        moreButton.titleLabel?.textColor = Colors.brand
+        moreButton.tintColor = Colors.brand
     }
     
     private func getStringFromDate(_ unixTimestamp: Int) -> String {
@@ -143,12 +159,11 @@ class NewsTableViewCell: UITableViewCell {
         postDateLabel.text = getStringFromDate(item.date)
         
         postTextLabel.text = item.text
-        if postTextLabel.text!.count > 200 {
-           let readmoreFont = UIFont(name: "Helvetica-Oblique", size: 11.0)
-            let readmoreFontColor = UIColor.blue
-            DispatchQueue.main.async {
-                self.postTextLabel.addTrailing(with: "... ", moreText: "Readmore", moreTextFont: readmoreFont!, moreTextColor: readmoreFontColor)
-            }
+        if !item.text.isEmpty {
+            setupExpandableLabel(text: item.text)
+        } else {
+            moreButton.isHidden = true
+            textHeightConstraint?.isActive = false
         }
         
         if let photo = item.photo {
@@ -192,5 +207,52 @@ class NewsTableViewCell: UITableViewCell {
     
     @IBAction func repostButtonPressed(_ sender: UIButton) {
         print(#function)
+    }
+    
+    private func setupExpandableLabel(text: String) {
+        let labelSize = getLabelSize(label: postTextLabel)
+        let maxHeight: CGFloat = 100
+        if labelSize.height > maxHeight && text.count > 1 {
+            textHeightConstraint = postTextLabel.heightAnchor.constraint(equalToConstant: 100)
+            textHeightConstraint?.isActive = true
+            moreButton.frame = CGRect(x: postTextLabel.frame.minX,
+                                      y: postTextLabel.frame.maxY + 10,
+                                      width: 35,
+                                      height: 16)
+            moreButton.isHidden = false
+        } else {
+            moreButton.isHidden = true
+            postTextLabel.heightAnchor.constraint(equalToConstant: maxHeight).isActive = false
+        }
+    }
+
+    @IBAction func moreButtonTapped(_ sender: Any) {
+        if isExpanded {
+            textHeightConstraint?.isActive = true
+            moreButton.setTitle("Show more", for: .normal)
+        } else {
+            textHeightConstraint?.isActive = false
+            moreButton.setTitle("Show less", for: .normal)
+        }
+        isExpanded = !isExpanded
+    }
+    
+    private func getLabelSize(label: UILabel) -> CGSize {
+        let labelSize: CGSize
+        if let labelText = label.text, !labelText.isEmpty {
+            labelSize = getLabelSize(text: labelText as NSString, font: label.font)
+        } else {
+            labelSize = .zero
+        }
+        return labelSize
+    }
+    
+    private func getLabelSize(text: NSString, font: UIFont) -> CGSize {
+        let maxWidth = postTextLabel.frame.width
+        let textBlock = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
+        let rect = text.boundingRect(with: textBlock, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
+        let width = Double(rect.width)
+        let height = Double(rect.height)
+        return CGSize(width: ceil(width), height: ceil(height))
     }
 }

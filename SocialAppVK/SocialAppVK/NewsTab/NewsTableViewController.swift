@@ -24,13 +24,12 @@ class NewsTableViewController: UITableViewController {
         tableView.prefetchDataSource = self
 
         tableView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellReuseIdentifier: reuseIdentifier)
-        
-//        tableView.rowHeight = UITableView.automaticDimension
+
         tableView.backgroundColor = Colors.background
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "To Top", style: .plain, target: self, action: #selector(topButtonTapped))
         
         setupRefreshControl()
-        loadNews(completion: {})
+        loadNews {}
     }
     
     @objc func topButtonTapped() {
@@ -46,12 +45,11 @@ class NewsTableViewController: UITableViewController {
     @objc func handleRefreshControl() {
         loadNews() { [weak self] in
             guard let self = self else { return }
-            self.tableView.reloadData()
-
+            
             // Dismiss the refresh control.
-               DispatchQueue.main.async {
-                  self.tableView.refreshControl?.endRefreshing()
-               }
+            DispatchQueue.main.async {
+                self.tableView.refreshControl?.endRefreshing()
+            }
         }
 
     }
@@ -64,6 +62,7 @@ class NewsTableViewController: UITableViewController {
                 self.groups = feedResponse.groups
                 self.nextFrom = feedResponse.nextFrom
                 self.tableView.reloadData()
+                completion()
             }
         }
     }
