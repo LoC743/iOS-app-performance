@@ -126,14 +126,16 @@ class NewsTableViewController: UITableViewController {
 
 extension NewsTableViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        if !isLoading {
+        let maxIndex = indexPaths.max()?.row ?? 0
+        if maxIndex == newsArray.count - 1, !isLoading {
             isLoading = true
             loadNextNews()
         }
     }
 
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        if isLoading {
+        let maxIndex = indexPaths.max()?.row ?? 0
+        if maxIndex == newsArray.count - 1, isLoading {
             self.request?.cancel()
         }
     }
