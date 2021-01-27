@@ -87,13 +87,13 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     @objc func handleImageTapped() {
-        print(#function)
+
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "PhotoViewerViewController") as! PhotoViewerViewController
         
         guard let post = post,
               let photo = post.photo,
               let main = mainScreen else { return }
-        print("In")
+        
         let vkImage = VKImage(url: photo.url, height: photo.height, width: photo.width)
         let image = Image(vkImage: vkImage)
         
