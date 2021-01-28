@@ -6,7 +6,7 @@
 | Урок 2. Параллельное программирование. GCD         | :white_check_mark:    |
 | Урок 3. Параллельное программирование. NSOperation | :white_check_mark:    |
 | Урок 4. Асинхронный код. Futures/Promises          | :mag:    |
-| Урок 5. FileManager                                | :x:    |
+| Урок 5. FileManager                                | :mag:    |
 | Урок 6. Оптимизация UITableView и UICollectionView | :x:    |
 | Урок 7. Паттерны ленты новостей                    | :x:    |
 | Урок 8. Асинхронное создание изображений           | :x:    |

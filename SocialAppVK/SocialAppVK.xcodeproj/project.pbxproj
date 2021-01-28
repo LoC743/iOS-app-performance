@@ -39,6 +39,7 @@
 		8AA99CD4252B1FF900A05F86 /* FriendsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA99CD3252B1FF900A05F86 /* FriendsTableViewController.swift */; };
 		8AA99CD7252B200600A05F86 /* GroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA99CD6252B200600A05F86 /* GroupsTableViewController.swift */; };
 		8AA99CDB252B2C1D00A05F86 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA99CDA252B2C1D00A05F86 /* Colors.swift */; };
+		8AB0A4B925B6EDE7009B3448 /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB0A4B825B6EDE7009B3448 /* PhotoService.swift */; };
 		8AB781B72539C4F6007AE4B2 /* NewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB781B62539C4F6007AE4B2 /* NewsTableViewController.swift */; };
 		8AB781BB2539C51A007AE4B2 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB781B92539C51A007AE4B2 /* NewsTableViewCell.swift */; };
 		8AB781BC2539C51A007AE4B2 /* NewsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AB781BA2539C51A007AE4B2 /* NewsTableViewCell.xib */; };
@@ -98,6 +99,7 @@
 		8AA99CD3252B1FF900A05F86 /* FriendsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableViewController.swift; sourceTree = "<group>"; };
 		8AA99CD6252B200600A05F86 /* GroupsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsTableViewController.swift; sourceTree = "<group>"; };
 		8AA99CDA252B2C1D00A05F86 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		8AB0A4B825B6EDE7009B3448 /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
 		8AB781B62539C4F6007AE4B2 /* NewsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewController.swift; sourceTree = "<group>"; };
 		8AB781B92539C51A007AE4B2 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		8AB781BA2539C51A007AE4B2 /* NewsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTableViewCell.xib; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				8AC50BE02567C47C00BB808C /* UserSession.swift */,
 				8AC50BE62567C55800BB808C /* Network */,
 				8ABAE8F925711744008F11A4 /* Database */,
+				8AB0A4B825B6EDE7009B3448 /* PhotoService.swift */,
 			);
 			path = SocialAppVK;
 			sourceTree = "<group>";
@@ -447,6 +450,7 @@
 				8A25FDBE25334F5400AF98F1 /* CustomAvatarView.swift in Sources */,
 				8AA99CD7252B200600A05F86 /* GroupsTableViewController.swift in Sources */,
 				8A3E6DAF2525E50B00766A2E /* TabBarController.swift in Sources */,
+				8AB0A4B925B6EDE7009B3448 /* PhotoService.swift in Sources */,
 				8AA99CD4252B1FF900A05F86 /* FriendsTableViewController.swift in Sources */,
 				8A90D18C25838224005703FC /* CurrentUser.swift in Sources */,
 				8A788B3F25A5B6A400614B7D /* GroupImageCollectionViewCell.swift in Sources */,
