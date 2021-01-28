@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import PromiseKit
 
 class GroupsTableViewController: UITableViewController {
     
@@ -40,6 +41,23 @@ class GroupsTableViewController: UITableViewController {
         loadingView.isHidden = true
     }
     
+    func loadGroupDataNetworkPromise() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        if let promise = NetworkManager.shared.loadGroupsListPromise(count: 0, offset: 0) {
+            promise.get { (groups) in
+                DatabaseManager.shared.deleteGroupData() // Removing all group data before loading new data from network
+                DatabaseManager.shared.saveGroupData(groups: groups) // Saving data from network to Realm
+            }
+            .catch { (error) in
+                print(error.localizedDescription)
+            }
+            .finally {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            }
+        }
+        
+    }
+    
     func getGroupData() {
         self.groupsData = DatabaseManager.shared.loadGroupData()
         self.groupToken = groupsData.observe(on: DispatchQueue.main, { [weak self] (changes) in
@@ -60,7 +78,8 @@ class GroupsTableViewController: UITableViewController {
             }
         })
         
-        loadGroupList() // Load new data anyways
+        loadGroupDataNetworkPromise()
+//        loadGroupList() // Load new data anyways
     }
     
     private func loadGroupList() {
