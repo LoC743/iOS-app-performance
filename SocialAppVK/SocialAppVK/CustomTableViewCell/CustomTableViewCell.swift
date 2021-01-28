@@ -8,20 +8,84 @@
 import UIKit
 
 class CustomTableViewCell: UITableViewCell {
-    @IBOutlet weak var avatarView: CustomAvatarView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var statusLabel: UILabel!
+//    @IBOutlet weak var avatarView: CustomAvatarView!
+//    @IBOutlet weak var nameLabel: UILabel!
+//    @IBOutlet weak var statusLabel: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
+    var avatarView: CustomAvatarView = CustomAvatarView()
+    var nameLabel: UILabel = UILabel()
+    var statusLabel: UILabel = UILabel()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupCell()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupCell()
+    }
+    
+    // MARK: - Setup cell UI
+    
+    func setupCell() {
         contentView.backgroundColor = Colors.background
         
-        nameLabel.font = .systemFont(ofSize: 14, weight: .semibold)
-        statusLabel.font = .systemFont(ofSize: 13, weight: .light)
-        
         setupAvatarView()
+        setupNameLabel()
     }
+    
+    func setupAvatarView() {
+        addSubview(avatarView)
+        let avatarViewFrame = CGRect(
+            x: 10,
+            y: 10,
+            width: 55,
+            height: 55)
+        
+        avatarView.frame = avatarViewFrame
+        avatarView.backgroundColor = Colors.background
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.avatarViewTapped(_:)))
+        avatarView.addGestureRecognizer(tap)
+        
+    }
+    
+    @objc func avatarViewTapped(_ sender: UITapGestureRecognizer) {
+        animateAvatarView()
+    }
+    
+    func setupNameLabel() {
+        addSubview(nameLabel)
+        let avatarViewFrame = avatarView.frame
+        let nameLabelFrameX = avatarViewFrame.maxX + 25
+        let nameLabelFrame = CGRect(
+            x: nameLabelFrameX,
+            y: 15,
+            width: bounds.maxX - nameLabelFrameX - 10,
+            height: 17)
+        
+        nameLabel.frame = nameLabelFrame
+        nameLabel.backgroundColor = Colors.background
+        nameLabel.font = .systemFont(ofSize: 14, weight: .semibold)
+    }
+    
+    func setupStatusLabel() {
+        addSubview(statusLabel)
+        let nameLabelFrame = nameLabel.frame
+        let statusLabelFrame = CGRect(
+            x: nameLabelFrame.origin.x,
+            y: nameLabelFrame.maxY + 7,
+            width: bounds.maxX - nameLabelFrame.origin.x - 10,
+            height: 16)
+        
+        statusLabel.frame = statusLabelFrame
+        statusLabel.backgroundColor = Colors.background
+        statusLabel.font = .systemFont(ofSize: 13, weight: .light)
+    }
+
+    
+    // MARK: - Setup cell with data
     
     private func getLastSeenDate(lastSeenUnix: Int) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(lastSeenUnix))
@@ -33,6 +97,7 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func setStatusLabel(_ friend: User) {
+        setupStatusLabel()
         if friend.isOnline {
             statusLabel.textColor = Colors.brand
             statusLabel.text = "online"
@@ -69,16 +134,8 @@ class CustomTableViewCell: UITableViewCell {
         statusLabel.isHidden = true
         setValues(item: group)
     }
-
     
-    func setupAvatarView() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.avatarViewTapped(_:)))
-        avatarView.addGestureRecognizer(tap)
-    }
-    
-    @objc func avatarViewTapped(_ sender: UITapGestureRecognizer) {
-        animateAvatarView()
-    }
+    // MARK: - Animation
     
     private func animateAvatarView() {
         UIView.animate(withDuration: 1.3, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 0, options: [.autoreverse]) {

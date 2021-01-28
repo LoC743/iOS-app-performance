@@ -161,6 +161,7 @@
                 <outlet property="postTextLabel" destination="FBw-Yb-eh1" id="AXg-fB-sWj"/>
                 <outlet property="repostButton" destination="yMZ-ef-OSR" id="jrn-hz-cyD"/>
                 <outlet property="viewsCountLabel" destination="65k-2I-9It" id="euN-Io-a6t"/>
+                <outlet property="viewsImageView" destination="w4K-gq-6jw" id="UDq-CE-T0S"/>
             </connections>
             <point key="canvasLocation" x="128.2608695652174" y="262.83482142857144"/>
         </tableViewCell>

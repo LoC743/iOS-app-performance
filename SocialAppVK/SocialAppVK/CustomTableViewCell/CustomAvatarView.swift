@@ -14,6 +14,7 @@ class CustomAvatarView: UIView {
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = imageView.frame.height / 2
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = Colors.background
         
         return imageView
     }()

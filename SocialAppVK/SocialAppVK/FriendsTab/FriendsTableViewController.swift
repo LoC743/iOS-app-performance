@@ -28,9 +28,9 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBar.delegate = self
+        setupSearchBar()
         
-        tableView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         
         view.backgroundColor = Colors.background
         tableView.sectionIndexBackgroundColor = Colors.background
@@ -145,6 +145,12 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! CustomTableViewCell
         
+        configureCell(cell: cell, indexPath: indexPath)
+        
+        return cell
+    }
+    
+    private func configureCell(cell: CustomTableViewCell, indexPath: IndexPath) {
         var user: User?
         if indexPath.section == 0 {
             user = importantFriends[indexPath.row]
@@ -152,14 +158,12 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             user = otherFriends[indexPath.row]
         }
         
-        guard let userToSet = user else { return UITableViewCell() }
+        guard let userToSet = user else { return }
 
         cell.setFriendCell(friend: userToSet)
         if let photoURLs = userToSet.photo {
             cell.avatarView.imageView.image = photoService?.photo(atIndexpath: indexPath, byUrl: photoURLs.photo_200)
         }
-        
-        return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -182,7 +186,6 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         vc.getImages(user: userToSet)
         
         self.navigationController?.pushViewController(vc, animated: true)
-
     }
     
     // MARK: - Custom Section View
@@ -196,6 +199,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
 
         let sectionLabelFrame: CGRect = CGRect(x: 15, y: 0, width: 100, height: viewHeight/2)
         let sectionLabel = UILabel(frame: sectionLabelFrame)
+        sectionLabel.backgroundColor = Colors.background
         sectionLabel.textAlignment = .left
         sectionLabel.font = .systemFont(ofSize: 16)
         sectionLabel.textColor = Colors.brand
@@ -204,6 +208,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         if section == 1 {
             let numberOfFirendsFrame: CGRect = CGRect(x: 50, y: 0, width: 100, height: viewHeight/2)
             let numberOfFirendsLabel = UILabel(frame: numberOfFirendsFrame)
+            numberOfFirendsLabel.backgroundColor = Colors.background
             numberOfFirendsLabel.textAlignment = .left
             numberOfFirendsLabel.font = .systemFont(ofSize: 14)
             numberOfFirendsLabel.textColor = .gray
@@ -232,6 +237,11 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     // MARK: - SearchBar setup
+    
+    func setupSearchBar() {
+        searchBar.delegate = self
+        searchBar.barTintColor = Colors.background
+    }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         sections = ["Поиск"]

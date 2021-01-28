@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		771B90D9BB58BF164FE38927 /* Pods_SocialAppVK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF773627850D382E61E58CE5 /* Pods_SocialAppVK.framework */; };
 		8A184F8125332C02004A002E /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A184F7F25332C02004A002E /* CustomTableViewCell.swift */; };
-		8A184F8225332C02004A002E /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A184F8025332C02004A002E /* CustomTableViewCell.xib */; };
 		8A184F8725332D8B004A002E /* GroupSearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A184F8625332D8B004A002E /* GroupSearchTableViewController.swift */; };
 		8A184F8D25334458004A002E /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A184F8B25334458004A002E /* PostCollectionViewCell.swift */; };
 		8A1BCF81258A1CF9008DAD90 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1BCF80258A1CF9008DAD90 /* Feed.swift */; };
@@ -67,7 +66,6 @@
 		2EDDD767853DE5DBBB8864EE /* Pods-SocialAppVK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialAppVK.debug.xcconfig"; path = "Target Support Files/Pods-SocialAppVK/Pods-SocialAppVK.debug.xcconfig"; sourceTree = "<group>"; };
 		32B623515055FA9D17DFE87B /* Pods-SocialAppVK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialAppVK.release.xcconfig"; path = "Target Support Files/Pods-SocialAppVK/Pods-SocialAppVK.release.xcconfig"; sourceTree = "<group>"; };
 		8A184F7F25332C02004A002E /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
-		8A184F8025332C02004A002E /* CustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell.xib; sourceTree = "<group>"; };
 		8A184F8625332D8B004A002E /* GroupSearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSearchTableViewController.swift; sourceTree = "<group>"; };
 		8A184F8B25334458004A002E /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
 		8A1BCF80258A1CF9008DAD90 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
@@ -149,7 +147,6 @@
 			isa = PBXGroup;
 			children = (
 				8A184F7F25332C02004A002E /* CustomTableViewCell.swift */,
-				8A184F8025332C02004A002E /* CustomTableViewCell.xib */,
 				8A25FDBD25334F5400AF98F1 /* CustomAvatarView.swift */,
 			);
 			path = CustomTableViewCell;
@@ -374,7 +371,6 @@
 				8A788B3B25A5B51E00614B7D /* GroupProfileViewController.xib in Resources */,
 				8A9A17482522374E003E44BC /* LaunchScreen.storyboard in Resources */,
 				8A9A17452522374E003E44BC /* Assets.xcassets in Resources */,
-				8A184F8225332C02004A002E /* CustomTableViewCell.xib in Resources */,
 				8AE4267B25A3444C003FEB87 /* UserImageCollectionViewCell.xib in Resources */,
 				8AE4268325A3459A003FEB87 /* HeaderSectionCollectionReusableView.xib in Resources */,
 				8A788B4525A5B82C00614B7D /* HeaderGroupSectionCollectionReusableView.xib in Resources */,
