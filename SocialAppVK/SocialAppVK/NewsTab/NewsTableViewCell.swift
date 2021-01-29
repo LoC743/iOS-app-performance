@@ -24,8 +24,8 @@ class NewsTableViewCell: UITableViewCell {
     var viewsCountLabel: UILabel = UILabel()
     
     var moreButton: UIButton = UIButton()
-    private var isExpanded: Bool = false
-    private var isExpandable: Bool = false
+    var isExpanded: Bool = false
+    var isExpandable: Bool = false
     
     var mainScreen: NewsTableViewController?
     
@@ -33,6 +33,8 @@ class NewsTableViewCell: UITableViewCell {
     
     private let likeImage = UIImage(systemName: "heart.fill")!
     private let dislikeImage = UIImage(systemName: "heart")!
+    
+    private let maxHeight: CGFloat = 200
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,10 +48,6 @@ class NewsTableViewCell: UITableViewCell {
     
     private func setupCell() {
         self.contentView.backgroundColor = Colors.background
-        
-        setupAvatarImageView()
-        setupNameLabel()
-        setupDateLabel()
         
         isExpanded = false
         isExpandable = false
@@ -113,6 +111,7 @@ class NewsTableViewCell: UITableViewCell {
         postTextLabel.backgroundColor = Colors.background
         postTextLabel.numberOfLines = 0
         postTextLabel.font = .systemFont(ofSize: 14)
+        postTextLabel.lineBreakMode = .byTruncatingTail
         
         layoutTextLabel(text: text)
     }
@@ -121,25 +120,47 @@ class NewsTableViewCell: UITableViewCell {
         isExpandable = false
         let avatarImageViewFrame = avatarImageView.frame
         if text.isEmpty {
-            let origin = CGPoint(x: 15, y: avatarImageViewFrame.maxY + 10)
+            let origin = CGPoint(x: 10, y: avatarImageViewFrame.maxY + 10)
             postTextLabel.frame = CGRect(origin: origin, size: .zero)
         } else {
             let size = getLabelSize(label: postTextLabel)
-            let maxHeight: CGFloat = 100
             var height = size.height
-            isExpandable = true
-            if size.height >= maxHeight {
+            if size.height > maxHeight {
                 height = maxHeight
-//                isExpandable = true
+                setupMoreButton()
+                isExpandable = true
             }
             let frame = CGRect(
-                x: 15,
+                x: 10,
                 y: avatarImageViewFrame.maxY + 10,
-                width: bounds.width - 30,
+                width: bounds.width - 20,
                 height: height
             )
             postTextLabel.frame = frame
         }
+    }
+
+    private func setupMoreButton() {
+        addSubview(moreButton)
+        
+        layoutMoreButton()
+        
+        moreButton.setTitle("Show more", for: .normal)
+        moreButton.setTitleColor(Colors.brand, for: .normal)
+        moreButton.tintColor = Colors.brand
+        moreButton.backgroundColor = Colors.background
+        moreButton.titleLabel?.font = .systemFont(ofSize: 15)
+    }
+    
+    private func layoutMoreButton() {
+        let postTextLabelFrame = postTextLabel.frame
+        let frame = CGRect(
+            x: bounds.maxX - 82,
+            y: postTextLabelFrame.maxY - 5,
+            width: 77,
+            height: 30
+        )
+        moreButton.frame = frame
     }
     
     private func setupPostImageView(_ photo: VKImage) {
@@ -156,12 +177,21 @@ class NewsTableViewCell: UITableViewCell {
         postImageView.addGestureRecognizer(imageTapped)
     }
     
+    func setPostImage(url: String) {
+        guard let url = URL(string: url) else {
+            postImageView.isHidden = true
+            return
+        }
+        postImageView.isHidden = false
+        postImageView.kf.setImage(with: url)
+    }
+    
     private func layoutPostImageView(photo: VKImage) {
         let postTextLabelFrame = postTextLabel.frame
         let frameWidth: CGFloat = CGFloat(photo.width) > bounds.width ? bounds.width : CGFloat(photo.width)
         let frame = CGRect(
             x: bounds.midX - frameWidth/2,
-            y: postTextLabelFrame.maxY + 5,
+            y: postTextLabelFrame.maxY + 25,
             width: frameWidth,
             height: frameWidth * photo.aspectRatio
         )
@@ -298,14 +328,6 @@ class NewsTableViewCell: UITableViewCell {
         viewsImageView.frame = viewsImageViewFrame
     }
     
-    // MARK: More button
-    private func setupMoreButton() {
-        moreButton.isHidden = true
-        moreButton.setTitle("Show more", for: .normal)
-        moreButton.titleLabel?.textColor = Colors.brand
-        moreButton.tintColor = Colors.brand
-    }
-    
     private func getStringFromDate(_ unixTimestamp: Int) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(unixTimestamp))
         let dateFormatter = DateFormatter()
@@ -332,19 +354,17 @@ class NewsTableViewCell: UITableViewCell {
         self.likeButton.setTitle(likesCount, for: .normal)
     }
     
-    func setPostImage(url: String) {
-        guard let url = URL(string: url) else {
-            postImageView.isHidden = true
-            return
-        }
-        postImageView.isHidden = false
-        postImageView.kf.setImage(with: url)
-    }
-    
     func setValues(item: News, group: Group) {
         self.post = item
         
+        isExpanded = false
+        isExpandable = false
+        
         // Header новости
+        setupAvatarImageView()
+        setupNameLabel()
+        setupDateLabel()
+        
         if let photo = group.photo,
            let url = URL(string: photo.photo_100) {
             avatarImageView.kf.setImage(with: url)
@@ -354,7 +374,6 @@ class NewsTableViewCell: UITableViewCell {
         
         // Наполнение новости
         setupTextLabel(item.text)
-        
         
         if let photo = item.photo {
             setupPostImageView(photo)
@@ -410,6 +429,7 @@ class NewsTableViewCell: UITableViewCell {
         guard isExpandable else { return }
         if !isExpanded {
             // Если лейбл требуется раскрыть
+            moreButton.setTitle("Show less", for: .normal)
             let size = getLabelSize(label: postTextLabel)
             postTextLabel.frame = CGRect(
                 origin: postTextLabel.frame.origin,
@@ -417,7 +437,8 @@ class NewsTableViewCell: UITableViewCell {
             )
         } else {
             // Лейбл требуется закрыть
-            let size = CGSize(width: postTextLabel.frame.width, height: 100)
+            moreButton.setTitle("Show more", for: .normal)
+            let size = CGSize(width: postTextLabel.frame.width, height: maxHeight)
             postTextLabel.frame = CGRect(
                 origin: postTextLabel.frame.origin,
                 size: size
@@ -429,6 +450,7 @@ class NewsTableViewCell: UITableViewCell {
     
     private func layoutViews() {
         guard let item = post else { return }
+        layoutMoreButton()
         if let photo = item.photo {
             layoutPostImageView(photo: photo)
         }

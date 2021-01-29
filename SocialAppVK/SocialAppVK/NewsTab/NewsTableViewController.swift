@@ -132,14 +132,14 @@ class NewsTableViewController: UITableViewController {
         configureCell(cell: testCell, indexPath: indexPath)
         
         let height = testCell.cellSize().height
-        return height
+        return 800
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
         
         cell?.expandLabel()
-        
+                                            
         tableView.beginUpdates()
         tableView.endUpdates()
         tableView.scrollToRow(at: indexPath, at: .top, animated: true)
