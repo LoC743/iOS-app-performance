@@ -8,24 +8,24 @@
 import UIKit
 
 class NewsTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
+    var avatarImageView: UIImageView = UIImageView()
+    var nameLabel: UILabel = UILabel()
     
-    @IBOutlet weak var postDateLabel: UILabel!
-    @IBOutlet weak var postTextLabel: UILabel!
-    var textHeightConstraint: NSLayoutConstraint?
-    @IBOutlet weak var postImageView: UIImageView!
+    var postDateLabel: UILabel = UILabel()
+    var postTextLabel: UILabel = UILabel()
     
-    @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var commentButton: UIButton!
-    @IBOutlet weak var repostButton: UIButton!
+    var postImageView: UIImageView = UIImageView()
     
-    @IBOutlet weak var viewsImageView: UIImageView!
-    @IBOutlet weak var viewsCountLabel: UILabel!
+    var likeButton: UIButton = UIButton()
+    var commentButton: UIButton = UIButton()
+    var repostButton: UIButton = UIButton()
     
-    @IBOutlet weak var moreButton: UIButton!
-    var isExpanded: Bool = false
+    var viewsImageView: UIImageView = UIImageView()
+    var viewsCountLabel: UILabel = UILabel()
+    
+    var moreButton: UIButton = UIButton()
+    private var isExpanded: Bool = false
+    private var isExpandable: Bool = false
     
     var mainScreen: NewsTableViewController?
     
@@ -34,50 +34,120 @@ class NewsTableViewCell: UITableViewCell {
     private let likeImage = UIImage(systemName: "heart.fill")!
     private let dislikeImage = UIImage(systemName: "heart")!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        contentView.backgroundColor = Colors.background
-        setupView()
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupCell()
     }
     
-    private func setupView() {
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupCell()
+    }
+    
+    private func setupCell() {
         self.contentView.backgroundColor = Colors.background
+        
         setupAvatarImageView()
         setupNameLabel()
         setupDateLabel()
-        setupPostImageView()
-        setupTextLabel()
-        setupLikeButton()
-        setupCommentButton()
-        setupRepostButton()
-        setupViewsCountLabel()
-        setupMoreButton()
         
-        textHeightConstraint?.isActive = false
         isExpanded = false
+        isExpandable = false
     }
     
     private func setupAvatarImageView() {
+        addSubview(avatarImageView)
+        
+        let frame = CGRect(
+            x: 15,
+            y: 15,
+            width: 55,
+            height: 55
+        )
+        avatarImageView.frame = frame
         avatarImageView.contentMode = .scaleAspectFill
         avatarImageView.backgroundColor = Colors.background
-        avatarImageView.layer.cornerRadius = avatarImageView.frame.height / 2
+        avatarImageView.layer.cornerRadius = frame.height / 2
+        avatarImageView.clipsToBounds = true
     }
     
     private func setupNameLabel() {
+        addSubview(nameLabel)
+        
+        let avatarImageViewFrame = avatarImageView.frame
+        let originX = avatarImageViewFrame.maxX + 15
+        let frame = CGRect(
+            x: originX,
+            y: 15,
+            width: bounds.width - originX - 15,
+            height: 19
+        )
+        nameLabel.frame = frame
         nameLabel.textColor = Colors.text
         nameLabel.backgroundColor = Colors.background
         nameLabel.font = .systemFont(ofSize: 15, weight: .semibold)
     }
     
     private func setupDateLabel() {
+        addSubview(postDateLabel)
+        
+        let nameLabelFrame = nameLabel.frame
+        let frame = CGRect(
+            x: nameLabelFrame.origin.x,
+            y: nameLabelFrame.maxY + 5,
+            width: nameLabelFrame.width,
+            height: 16
+        )
+        postDateLabel.frame = frame
         postDateLabel.textColor = Colors.text
         postDateLabel.backgroundColor = Colors.background
         postDateLabel.font = .systemFont(ofSize: 13, weight: .light)
     }
     
-    private func setupPostImageView() {
-//        postImageView.contentMode = .scaleAspectFit
+    private func setupTextLabel(_ text: String) {
+        addSubview(postTextLabel)
+        
+        postTextLabel.text = text
+        postTextLabel.textAlignment = .natural
+        postTextLabel.textColor = Colors.text
+        postTextLabel.backgroundColor = Colors.background
+        postTextLabel.numberOfLines = 0
+        postTextLabel.font = .systemFont(ofSize: 14)
+        
+        layoutTextLabel(text: text)
+    }
+    
+    private func layoutTextLabel(text: String) {
+        isExpandable = false
+        let avatarImageViewFrame = avatarImageView.frame
+        if text.isEmpty {
+            let origin = CGPoint(x: 15, y: avatarImageViewFrame.maxY + 10)
+            postTextLabel.frame = CGRect(origin: origin, size: .zero)
+        } else {
+            let size = getLabelSize(label: postTextLabel)
+            let maxHeight: CGFloat = 100
+            var height = size.height
+            isExpandable = true
+            if size.height >= maxHeight {
+                height = maxHeight
+//                isExpandable = true
+            }
+            let frame = CGRect(
+                x: 15,
+                y: avatarImageViewFrame.maxY + 10,
+                width: bounds.width - 30,
+                height: height
+            )
+            postTextLabel.frame = frame
+        }
+    }
+    
+    private func setupPostImageView(_ photo: VKImage) {
+        addSubview(postImageView)
+        
+        layoutPostImageView(photo: photo)
+        setPostImage(url: photo.url)
+        
         postImageView.clipsToBounds = true
         postImageView.backgroundColor = Colors.background
         
@@ -86,8 +156,19 @@ class NewsTableViewCell: UITableViewCell {
         postImageView.addGestureRecognizer(imageTapped)
     }
     
+    private func layoutPostImageView(photo: VKImage) {
+        let postTextLabelFrame = postTextLabel.frame
+        let frameWidth: CGFloat = CGFloat(photo.width) > bounds.width ? bounds.width : CGFloat(photo.width)
+        let frame = CGRect(
+            x: bounds.midX - frameWidth/2,
+            y: postTextLabelFrame.maxY + 5,
+            width: frameWidth,
+            height: frameWidth * photo.aspectRatio
+        )
+        postImageView.frame = frame
+    }
+    
     @objc func handleImageTapped() {
-
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "PhotoViewerViewController") as! PhotoViewerViewController
         
         guard let post = post,
@@ -102,31 +183,122 @@ class NewsTableViewCell: UITableViewCell {
         main.navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func setupTextLabel() {
-        postTextLabel.textAlignment = .natural
-        postTextLabel.textColor = Colors.text
-        postTextLabel.backgroundColor = Colors.background
-        postTextLabel.numberOfLines = 0
-        postTextLabel.font = .systemFont(ofSize: 14)
-    }
-    
-    private func setupLikeButton() {
+    private func setupLikeButton(_ numberOfLikes: String) {
+        addSubview(likeButton)
+        
+        layoutLikeButton(numberOfLikes: numberOfLikes)
+        
+        likeButton.tintColor = .red
+        likeButton.setTitle(numberOfLikes, for: .normal)
+        likeButton.setTitleColor(Colors.text, for: .normal)
+        likeButton.titleLabel?.font = .systemFont(ofSize: 14)
         likeButton.backgroundColor = Colors.background
+        likeButton.addTarget(self, action: #selector(likeButtonPressed(_:)), for: .touchUpInside)
     }
     
-    private func setupCommentButton() {
+    private func layoutLikeButton(numberOfLikes: String) {
+        let postImageViewFrame = postImageView.frame
+        let frame = CGRect(
+            x: 10,
+            y: postImageViewFrame.maxY + 5,
+            width: CGFloat(25 + numberOfLikes.count*10),
+            height: 21
+        )
+        likeButton.frame = frame
+    }
+    
+    private func setupCommentButton(_ numberOfComments: String) {
+        addSubview(commentButton)
+        
+        layoutCommentButton(numberOfComments: numberOfComments)
+        
+        commentButton.setTitle(numberOfComments, for: .normal)
+        commentButton.setImage(UIImage(systemName: "text.bubble")!, for: .normal)
+        commentButton.tintColor = Colors.brand
+        commentButton.setTitleColor(Colors.text, for: .normal)
+        commentButton.titleLabel?.font = .systemFont(ofSize: 14)
         commentButton.backgroundColor = Colors.background
+        commentButton.addTarget(self, action: #selector(commentButtonPressed(_:)), for: .touchUpInside)
     }
     
-    private func setupRepostButton() {
+    private func layoutCommentButton(numberOfComments: String) {
+        let likeButtonFrame = likeButton.frame
+        let frame = CGRect(
+            x: likeButtonFrame.maxX + 5,
+            y: likeButtonFrame.origin.y,
+            width: CGFloat(25 + numberOfComments.count*10),
+            height: 22
+        )
+        commentButton.frame = frame
+    }
+    
+    private func setupRepostButton(_ numberOfReposts: String) {
+        addSubview(repostButton)
+        
+        layoutRepostButton(numberOfReposts: numberOfReposts)
+        
+        repostButton.setTitle(numberOfReposts, for: .normal)
+        repostButton.setImage(UIImage(systemName: "arrowshape.turn.up.left")!, for: .normal)
+        repostButton.tintColor = Colors.brand
+        repostButton.setTitleColor(Colors.text, for: .normal)
+        repostButton.titleLabel?.font = .systemFont(ofSize: 14)
         repostButton.backgroundColor = Colors.background
+        repostButton.addTarget(self, action: #selector(repostButtonPressed(_:)), for: .touchUpInside)
     }
     
-    private func setupViewsCountLabel() {
-        viewsImageView.backgroundColor = Colors.background
+    private func layoutRepostButton(numberOfReposts: String) {
+        let commentButtonFrame = commentButton.frame
+        let frame = CGRect(
+            x: commentButtonFrame.maxX + 5,
+            y: commentButtonFrame.origin.y,
+            width: CGFloat(25 + numberOfReposts.count*10),
+            height: 22
+        )
+        repostButton.frame = frame
+    }
+    
+    private func setupViewsCountLabel(_ viewsCount: String) {
+        addSubview(viewsCountLabel)
+        addSubview(viewsImageView)
+        
+        layoutViewsCountLabel(viewsCount: viewsCount)
+        
+        viewsCountLabel.text = viewsCount
+        viewsCountLabel.textColor = Colors.text
+        viewsCountLabel.font = .systemFont(ofSize: 14)
         viewsCountLabel.backgroundColor = Colors.background
+        
+        viewsImageView.image = UIImage(systemName: "eye")
+        viewsImageView.tintColor = Colors.brand
+        viewsImageView.backgroundColor = Colors.background
     }
     
+    private func layoutViewsCountLabel(viewsCount: String) {
+        let likeButtonFrame = likeButton.frame
+        let width = CGFloat(10 * viewsCount.count)
+        let viewsCountLabelFrame = CGRect(
+            x: UIScreen.main.bounds.maxX - width - 5,
+            y: likeButtonFrame.origin.y,
+            width: CGFloat(11 * viewsCount.count),
+            height: 20
+        )
+        viewsCountLabel.frame = viewsCountLabelFrame
+        layoutViewsImageView()
+    }
+    
+    private func layoutViewsImageView() {
+        let viewsCountLabelFrame = viewsCountLabel.frame
+        let viewsImageViewFrame = CGRect(
+            x: viewsCountLabelFrame.origin.x - 25,
+            y: viewsCountLabelFrame.origin.y + 1,
+            width: 21,
+            height: 17
+            
+        )
+        viewsImageView.frame = viewsImageViewFrame
+    }
+    
+    // MARK: More button
     private func setupMoreButton() {
         moreButton.isHidden = true
         moreButton.setTitle("Show more", for: .normal)
@@ -172,36 +344,30 @@ class NewsTableViewCell: UITableViewCell {
     func setValues(item: News, group: Group) {
         self.post = item
         
+        // Header новости
         if let photo = group.photo,
            let url = URL(string: photo.photo_100) {
             avatarImageView.kf.setImage(with: url)
         }
-        
         nameLabel.text = group.name
-        
         postDateLabel.text = getStringFromDate(item.date)
         
-        postTextLabel.text = item.text
-        if !item.text.isEmpty {
-            setupExpandableLabel(text: item.text)
-        } else {
-            moreButton.isHidden = true
-            textHeightConstraint?.isActive = false
-        }
+        // Наполнение новости
+        setupTextLabel(item.text)
+        
         
         if let photo = item.photo {
-            setPostImage(url: photo.url)
+            setupPostImageView(photo)
         }
         
-        likeButton.setTitle(String(item.likesCount), for: .normal)
-        repostButton.setTitle(String(item.repostsCount), for: .normal)
-        commentButton.setTitle(String(item.commentCount), for: .normal)
-        
-        viewsCountLabel.text = String(item.viewsCount)
-        
+        // Footer новости
+        setupLikeButton(String(item.likesCount))
         setLikeButtonState(isUserLikes: item.isUserLikes)
+        setupCommentButton(String(item.repostsCount))
+        setupRepostButton(String(item.commentCount))
+        setupViewsCountLabel(String(item.viewsCount))
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -220,40 +386,56 @@ class NewsTableViewCell: UITableViewCell {
         } completion: { (state) in }
     }
     
-    @IBAction func likeButtonPressed(_ sender: UIButton) {
+    @objc func likeButtonPressed(_ sender: UIButton) {
         changeLikeButtonImage()
     }
     
-    @IBAction func commentButtonPressed(_ sender: UIButton) {
+    @objc func commentButtonPressed(_ sender: UIButton) {
         print(#function)
     }
     
-    @IBAction func repostButtonPressed(_ sender: UIButton) {
+    @objc func repostButtonPressed(_ sender: UIButton) {
         print(#function)
     }
     
-    private func setupExpandableLabel(text: String) {
-        let labelSize = getLabelSize(label: postTextLabel)
-        let maxHeight: CGFloat = 100
-        if labelSize.height > maxHeight && text.count > 1 {
-            textHeightConstraint = postTextLabel.heightAnchor.constraint(equalToConstant: 100)
-            textHeightConstraint?.isActive = true
-            moreButton.isHidden = false
-        } else {
-            textHeightConstraint?.isActive = false
-            moreButton.isHidden = true
-        }
+    func cellSize() -> CGSize {
+        let width = bounds.width
+        // MARK: Dont't work somehow
+        let height = likeButton.frame.maxY + 10
+        
+        return CGSize(width: width, height: height)
     }
-
-    @IBAction func moreButtonTapped(_ sender: Any) {
-        if isExpanded {
-            textHeightConstraint?.isActive = true
-            moreButton.setTitle("Show more", for: .normal)
+    
+    func expandLabel() {
+        guard isExpandable else { return }
+        if !isExpanded {
+            // Если лейбл требуется раскрыть
+            let size = getLabelSize(label: postTextLabel)
+            postTextLabel.frame = CGRect(
+                origin: postTextLabel.frame.origin,
+                size: size
+            )
         } else {
-            textHeightConstraint?.isActive = false
-            moreButton.setTitle("Show less", for: .normal)
+            // Лейбл требуется закрыть
+            let size = CGSize(width: postTextLabel.frame.width, height: 100)
+            postTextLabel.frame = CGRect(
+                origin: postTextLabel.frame.origin,
+                size: size
+            )
         }
+        layoutViews()
         isExpanded = !isExpanded
+    }
+    
+    private func layoutViews() {
+        guard let item = post else { return }
+        if let photo = item.photo {
+            layoutPostImageView(photo: photo)
+        }
+        layoutLikeButton(numberOfLikes: String(item.likesCount))
+        layoutCommentButton(numberOfComments: String(item.commentCount))
+        layoutRepostButton(numberOfReposts: String(item.repostsCount))
+        layoutViewsCountLabel(viewsCount: String(item.viewsCount))
     }
     
     private func getLabelSize(label: UILabel) -> CGSize {
@@ -267,7 +449,8 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     private func getLabelSize(text: NSString, font: UIFont) -> CGSize {
-        let maxWidth = postTextLabel.frame.width
+        let postTextFrame = postTextLabel.frame
+        let maxWidth = postTextFrame.width
         let textBlock = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
         let rect = text.boundingRect(with: textBlock, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
         let width = Double(rect.width)

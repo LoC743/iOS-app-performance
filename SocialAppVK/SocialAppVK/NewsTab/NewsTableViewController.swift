@@ -18,12 +18,14 @@ class NewsTableViewController: UITableViewController {
     var isLoading = false
     var request: Request?
     
+    private let testCell = NewsTableViewCell()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.prefetchDataSource = self
 
-        tableView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
 
         tableView.backgroundColor = Colors.background
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "To Top", style: .plain, target: self, action: #selector(topButtonTapped))
@@ -94,6 +96,12 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NewsTableViewCell
 
+        configureCell(cell: cell, indexPath: indexPath)
+
+        return cell
+    }
+    
+    private func configureCell(cell: NewsTableViewCell, indexPath: IndexPath) {
         var groupToSet = Group()
         let newsPost = newsArray[indexPath.item]
         
@@ -106,34 +114,32 @@ class NewsTableViewController: UITableViewController {
         
         cell.setValues(item: newsPost, group: groupToSet)
         cell.mainScreen = self
-
-        return cell
     }
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // Before animation
-        cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        cell.alpha = 0.0
-        
-        // Animation
-        UIView.animate(withDuration: 1.0) {
-            cell.transform = .identity
-            cell.alpha = 1.0
-        }
-    }
+//    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        // Before animation
+//        cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+//        cell.alpha = 0.0
+//
+//        // Animation
+//        UIView.animate(withDuration: 1.0) {
+//            cell.transform = .identity
+//            cell.alpha = 1.0
+//        }
+//    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let tableWidth = tableView.bounds.width
-        let news = self.newsArray[indexPath.section]
+        configureCell(cell: testCell, indexPath: indexPath)
         
-        if let photo = news.photo {
-            let cellHeight = tableWidth * photo.aspectRatio
-            return cellHeight
-        }
-        return UITableView.automaticDimension
+        let height = testCell.cellSize().height
+        return height
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
+        
+        cell?.expandLabel()
+        
         tableView.beginUpdates()
         tableView.endUpdates()
         tableView.scrollToRow(at: indexPath, at: .top, animated: true)
