@@ -24,6 +24,7 @@ class NetworkManager {
     
     enum Paths: String {
         case friends = "friends.get"
+        case getAlbums = "photos.getAlbums"
         case photos = "photos.get"
         case groups = "groups.get"
         case searchGroups = "groups.search"
@@ -81,6 +82,32 @@ class NetworkManager {
         let url = baseURL + path
         
         return Session.custom.request(url, parameters: parameters)
+    }
+    
+    @discardableResult
+    func getAlbums(ownerID: String, completion: @escaping (AlbumList?) -> Void) -> Request? {
+        guard let token = UserSession.instance.token else { return nil }
+        
+        let path = Paths.getAlbums.rawValue
+        
+        let parameters: Parameters = [
+            "access_token": token,
+            "v": versionVKAPI,
+            "owner_id": ownerID,
+        ]
+        
+        let url = baseURL + path
+        
+        return Session.custom.request(url, parameters: parameters).responseData { response in
+            guard let data = response.value,
+                  let albumList = try? JSONDecoder().decode(AlbumList.self, from: data)
+            else {
+                print("Failed to pase group JSON!")
+                return
+            }
+            
+            completion(albumList)
+        }
     }
     
     @discardableResult

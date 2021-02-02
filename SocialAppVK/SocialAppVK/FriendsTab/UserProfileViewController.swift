@@ -26,6 +26,21 @@ class UserProfileViewController: UIViewController {
         userProfileCollectionView.collectionViewLayout = setupCollectionViewLayout()
         userProfileCollectionView.delegate = self
         userProfileCollectionView.dataSource = self
+        
+        setupAlbumsButton()
+    }
+    
+    private func setupAlbumsButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(albumButtonTapped))
+    }
+    
+    @objc func albumButtonTapped() {
+        let vc = UserAlbumsViewController()
+        
+        vc.owner = user
+        vc.loadAlbums(user: user)
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     private func loadImages(user: User, network: @escaping (ImageList?) -> Void) {

@@ -13,6 +13,64 @@ struct Likes {
     var count: Int
 }
 
+class Album: Object {
+    @objc dynamic var id: Int = -1
+    @objc dynamic var ownerID: Int = -1
+    @objc dynamic var title: String = ""
+    
+    
+    convenience init(id: Int, ownerID: Int, title: String) {
+        self.init()
+        
+        self.id = id
+        self.ownerID = ownerID
+        self.title = title
+    }
+    
+    override class func primaryKey() -> String? {
+        return "id"
+    }
+}
+
+class AlbumList: Decodable {
+    var albums: [Album] = []
+    
+    enum ResponseCodingKeys: String, CodingKey {
+        case response
+    }
+    
+    enum ItemsCodingKeys: String, CodingKey {
+        case count
+        case items
+    }
+    
+    enum AlbumCodingKeys: String, CodingKey {
+        case id
+        case title
+        case ownerID = "owner_id"
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let response = try decoder.container(keyedBy: ResponseCodingKeys.self)
+        let values = try response.nestedContainer(keyedBy: ItemsCodingKeys.self, forKey: .response)
+        
+        var items = try values.nestedUnkeyedContainer(forKey: .items)
+        
+        let itemsCount: Int = items.count ?? 0
+        for _ in 0..<itemsCount {
+            let albumContainer = try items.nestedContainer(keyedBy: AlbumCodingKeys.self)
+            
+            let id = try albumContainer.decode(Int.self, forKey: .id)
+            let ownerID = try albumContainer.decode(Int.self, forKey: .ownerID)
+            let title = try albumContainer.decode(String.self, forKey: .title)
+            
+            let album = Album(id: id, ownerID: ownerID, title: title)
+            
+            albums.append(album)
+        }
+    }
+}
+
 class VKImage: Object {
     @objc dynamic var height: Int = 0
     @objc dynamic var width: Int = 0
