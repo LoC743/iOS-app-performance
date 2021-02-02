@@ -47,8 +47,12 @@ class UserAlbumsViewController: ASDKViewController<ASTableNode> {
 
 extension UserAlbumsViewController: ASTableDelegate, ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-        // Open vc with photo collection
-        print(albums[indexPath.row])
+        let vc = AlbumPhotosViewController()
+        
+        vc.album = albums[indexPath.row]
+        vc.loadPhotosFromAlbum()
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func numberOfSections(in tableNode: ASTableNode) -> Int {

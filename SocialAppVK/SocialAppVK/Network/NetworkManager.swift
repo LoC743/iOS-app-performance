@@ -143,6 +143,35 @@ class NetworkManager {
     }
     
     @discardableResult
+    func getPhotosFrom(albumID: String, ownerID: String, completion: @escaping (ImageList?) -> Void, failure: @escaping () -> Void) -> Request? {
+        guard let token = UserSession.instance.token else { return nil }
+
+        let path = Paths.photos.rawValue
+
+        let parameters: Parameters = [
+            "album_id": albumID,
+            "owner_id": ownerID,
+            "access_token": token,
+            "v": versionVKAPI,
+            "extended": true,
+            "rev": true
+        ]
+
+        let url = baseURL + path
+
+        return Session.custom.request(url, parameters: parameters).responseData { response in
+            guard let data = response.value,
+                  let images = try? JSONDecoder().decode(ImageList.self, from: data)
+            else {
+                failure()
+                print("Failed to pase images JSON!")
+                return
+            }
+            completion(images)
+        }
+    }
+    
+    @discardableResult
     func loadGroupsList(count: Int, offset: Int, completion: @escaping (GroupList?) -> Void) -> Request? {
         guard let token = UserSession.instance.token,
               let userID = UserSession.instance.userID else { return nil }
