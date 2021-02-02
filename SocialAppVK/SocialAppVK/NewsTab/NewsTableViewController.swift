@@ -132,7 +132,7 @@ class NewsTableViewController: UITableViewController {
         configureCell(cell: testCell, indexPath: indexPath)
         
         let height = testCell.cellSize().height
-        return 800
+        return height
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
