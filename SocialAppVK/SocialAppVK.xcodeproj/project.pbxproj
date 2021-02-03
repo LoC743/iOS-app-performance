@@ -15,7 +15,6 @@
 		8A25FDBE25334F5400AF98F1 /* CustomAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A25FDBD25334F5400AF98F1 /* CustomAvatarView.swift */; };
 		8A3E6DAF2525E50B00766A2E /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3E6DAE2525E50B00766A2E /* TabBarController.swift */; };
 		8A43DE8A25C9542C003E16E0 /* UserAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A43DE8925C9542C003E16E0 /* UserAlbumsViewController.swift */; };
-		8A43DEA925C9603A003E16E0 /* AsyncAlbumTableNodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A43DEA825C9603A003E16E0 /* AsyncAlbumTableNodeCell.swift */; };
 		8A4C2AB825418E3C00DE263F /* PhotoViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4C2AB725418E3C00DE263F /* PhotoViewerViewController.swift */; };
 		8A77050425C97B0500218FA2 /* AlbumPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A77050325C97B0500218FA2 /* AlbumPhotosViewController.swift */; };
 		8A77050825C97F4E00218FA2 /* AsyncImageCellCollectionNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A77050725C97F4E00218FA2 /* AsyncImageCellCollectionNode.swift */; };
@@ -75,7 +74,6 @@
 		8A25FDBD25334F5400AF98F1 /* CustomAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAvatarView.swift; sourceTree = "<group>"; };
 		8A3E6DAE2525E50B00766A2E /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8A43DE8925C9542C003E16E0 /* UserAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAlbumsViewController.swift; sourceTree = "<group>"; };
-		8A43DEA825C9603A003E16E0 /* AsyncAlbumTableNodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncAlbumTableNodeCell.swift; sourceTree = "<group>"; };
 		8A4C2AB725418E3C00DE263F /* PhotoViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerViewController.swift; sourceTree = "<group>"; };
 		8A77050325C97B0500218FA2 /* AlbumPhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPhotosViewController.swift; sourceTree = "<group>"; };
 		8A77050725C97F4E00218FA2 /* AsyncImageCellCollectionNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageCellCollectionNode.swift; sourceTree = "<group>"; };
@@ -162,7 +160,6 @@
 			isa = PBXGroup;
 			children = (
 				8A43DE8925C9542C003E16E0 /* UserAlbumsViewController.swift */,
-				8A43DEA825C9603A003E16E0 /* AsyncAlbumTableNodeCell.swift */,
 				8A77050325C97B0500218FA2 /* AlbumPhotosViewController.swift */,
 				8A77050725C97F4E00218FA2 /* AsyncImageCellCollectionNode.swift */,
 			);
@@ -472,7 +469,6 @@
 				8AC1AB8A25AF02EA000D23B9 /* ParseUserDataOperation.swift in Sources */,
 				8AA99CD1252B1EDE00A05F86 /* Group.swift in Sources */,
 				8AB781B72539C4F6007AE4B2 /* NewsTableViewController.swift in Sources */,
-				8A43DEA925C9603A003E16E0 /* AsyncAlbumTableNodeCell.swift in Sources */,
 				8AE4268225A3459A003FEB87 /* HeaderSectionCollectionReusableView.swift in Sources */,
 				8A77050425C97B0500218FA2 /* AlbumPhotosViewController.swift in Sources */,
 				8A184F8725332D8B004A002E /* GroupSearchTableViewController.swift in Sources */,

@@ -15,12 +15,13 @@ class AlbumPhotosViewController: ASDKViewController<ASCollectionNode> {
     
     override init() {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        let width = UIScreen.main.bounds.width / 3
+        let width = UIScreen.main.bounds.height / 4
         
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: width, height: width)
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
+        layout.scrollDirection = .horizontal
         
         collectionNode = ASCollectionNode(frame: CGRect.zero, collectionViewLayout: layout)
         super.init(node: collectionNode)
@@ -36,7 +37,8 @@ class AlbumPhotosViewController: ASDKViewController<ASCollectionNode> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = album?.title
+        
+//        self.title = album?.title
         collectionNode.view.isScrollEnabled = true
     }
     

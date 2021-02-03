@@ -21,6 +21,7 @@ class UserAlbumsViewController: ASDKViewController<ASTableNode> {
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
+        tableNode.allowsSelection = false
     }
     
     required init?(coder: NSCoder) {
@@ -46,34 +47,34 @@ class UserAlbumsViewController: ASDKViewController<ASTableNode> {
 }
 
 extension UserAlbumsViewController: ASTableDelegate, ASTableDataSource {
-    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-        let vc = AlbumPhotosViewController()
-        
-        vc.album = albums[indexPath.row]
-        vc.loadPhotosFromAlbum()
-        
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
     func numberOfSections(in tableNode: ASTableNode) -> Int {
-        return 1
-    }
-    
-    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
         return albums.count
     }
     
-    func configureCell(indexPath: IndexPath) -> AsyncAlbumTableNodeCell {
-        let data = albums[indexPath.row]
-        let cell = AsyncAlbumTableNodeCell(titleText: data.title)
-        return cell
+    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        let cellNodeBlock = { [weak self] () -> ASCellNode in
-            guard let self = self else { return ASCellNode() }
-            return self.configureCell(indexPath: indexPath)
+        let data = albums[indexPath.section]
+        
+        let node = ASCellNode(viewControllerBlock: { () -> UIViewController in
+            
+            let vc = AlbumPhotosViewController()
+            vc.album = data
+            vc.loadPhotosFromAlbum()
+            return vc
+        }, didLoad: nil)
+        
+        let size = CGSize(width: tableNode.bounds.size.width, height: tableNode.bounds.size.height/2)
+        node.style.preferredSize = size
+        
+        return {
+            return node
         }
-        return cellNodeBlock
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return albums[section].title
     }
 }

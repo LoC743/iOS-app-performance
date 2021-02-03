@@ -13,6 +13,9 @@ class AsyncImageCellCollectionNode: ASCellNode {
     required init(with image: UIImage) {
         super.init()
     
+        backgroundColor = Colors.background
+        
+        imageNode.backgroundColor = Colors.background
         imageNode.contentMode = .scaleAspectFill
         imageNode.image = image
         self.addSubnode(self.imageNode)
