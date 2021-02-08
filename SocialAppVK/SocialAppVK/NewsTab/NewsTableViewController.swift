@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class NewsTableViewController: UITableViewController {
     
@@ -13,35 +14,71 @@ class NewsTableViewController: UITableViewController {
     
     var newsArray: [News] = []
     var groups: [Group] = []
+    var nextFrom = ""
+    var isLoading = false
+    var request: Request?
+    
+    private var testCell = NewsTableViewCell()
+    private var expandedCells: [IndexPath: NewsTableViewCell] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.prefetchDataSource = self
 
-        tableView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellReuseIdentifier: reuseIdentifier)
-        
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 600
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+
         tableView.backgroundColor = Colors.background
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "To Top", style: .plain, target: self, action: #selector(topButtonTapped))
         
-        loadNews()
+        setupRefreshControl()
+        loadNews {}
     }
     
     @objc func topButtonTapped() {
-        tableView.setContentOffset(.zero, animated: true)
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
     }
     
-    private func loadNews() {
-        NetworkManager.shared.loadFeed(count: 20) { [weak self] (feedResponse) in
+    private func setupRefreshControl() {
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.tintColor = Colors.brand
+        tableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+    }
+    
+    @objc func handleRefreshControl() {
+        loadNews() { [weak self] in
+            guard let self = self else { return }
+            
+            // Dismiss the refresh control.
+            DispatchQueue.main.async {
+                self.tableView.refreshControl?.endRefreshing()
+            }
+        }
+
+    }
+    
+    private func loadNews(completion: @escaping () -> Void) {
+        self.request = NetworkManager.shared.loadFeed(count: 25, from: "") { [weak self] (feedResponse) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.newsArray = feedResponse.newsArray
                 self.groups = feedResponse.groups
+                self.nextFrom = feedResponse.nextFrom
+                self.tableView.reloadData()
+                completion()
+            }
+        }
+    }
+    
+    private func loadNextNews() {
+        print(#function)
+        self.request = NetworkManager.shared.loadFeed(count: 15, from: nextFrom) { [weak self] (feedResponse) in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.newsArray += feedResponse.newsArray
+                self.groups += feedResponse.groups
+                self.nextFrom = feedResponse.nextFrom
+                self.isLoading = false
                 self.tableView.reloadData()
             }
         }
@@ -60,6 +97,12 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NewsTableViewCell
 
+        configureCell(cell: cell, indexPath: indexPath)
+
+        return cell
+    }
+    
+    private func configureCell(cell: NewsTableViewCell, indexPath: IndexPath) {
         var groupToSet = Group()
         let newsPost = newsArray[indexPath.item]
         
@@ -71,19 +114,64 @@ class NewsTableViewController: UITableViewController {
         }
         
         cell.setValues(item: newsPost, group: groupToSet)
-
-        return cell
+        cell.mainScreen = self
     }
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // Before animation
-        cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        cell.alpha = 0.0
+//    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        // Before animation
+//        cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+//        cell.alpha = 0.0
+//
+//        // Animation
+//        UIView.animate(withDuration: 1.0) {
+//            cell.transform = .identity
+//            cell.alpha = 1.0
+//        }
+//    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        testCell = NewsTableViewCell()
+        configureCell(cell: testCell, indexPath: indexPath)
         
-        // Animation
-        UIView.animate(withDuration: 1.0) {
-            cell.transform = .identity
-            cell.alpha = 1.0
+        if expandedCells[indexPath] != nil {
+            _ = testCell.expandLabel()
+        }
+        
+        let height = testCell.cellSize().height
+        return height
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell {
+            let isExpanded = cell.expandLabel()
+            
+            if isExpanded {
+                expandedCells[indexPath] = cell
+            } else {
+                expandedCells[indexPath] = nil
+            }
+                                                
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
+}
+
+extension NewsTableViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        let maxIndex = indexPaths.max()?.row ?? 0
+        if maxIndex == newsArray.count - 1, !isLoading {
+            isLoading = true
+            loadNextNews()
+        }
+    }
+
+    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        let maxIndex = indexPaths.max()?.row ?? 0
+        if maxIndex == newsArray.count - 1, isLoading {
+            self.request?.cancel()
+        }
+    }
+    
 }

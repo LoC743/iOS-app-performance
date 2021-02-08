@@ -11,20 +11,20 @@ class News: Object {
     @objc dynamic var sourceID: Int = -1
     @objc dynamic var text: String = ""
     @objc dynamic var date: Int = -1
-    @objc dynamic var photoURL: String = ""
+    @objc dynamic var photo: VKImage?
     @objc dynamic var commentCount: Int = -1
     @objc dynamic var likesCount: Int = -1
     @objc dynamic var isUserLikes: Bool = false
     @objc dynamic var repostsCount: Int = -1
     @objc dynamic var viewsCount: Int = -1
     
-    convenience init(sourceID: Int, text: String, date: Int, photoURL: String, commentCount: Int, likesCount: Int, isUserLikes: Bool, repostsCount: Int, viewsCount: Int) {
+    convenience init(sourceID: Int, text: String, date: Int, photo: VKImage, commentCount: Int, likesCount: Int, isUserLikes: Bool, repostsCount: Int, viewsCount: Int) {
         self.init()
         
         self.sourceID = sourceID
         self.text = text
         self.date = date
-        self.photoURL = photoURL
+        self.photo = photo
         self.commentCount = commentCount
         self.likesCount = likesCount
         self.isUserLikes = isUserLikes
@@ -36,6 +36,7 @@ class News: Object {
 class Feed: Decodable {
     var newsArray: [News] = []
     var groups: [Group] = []
+    var nextFrom = ""
     
     enum ResponseCodingKeys: String, CodingKey {
         case response
@@ -45,6 +46,7 @@ class Feed: Decodable {
         case items
         case profiles
         case groups
+        case nextFrom = "next_from"
     }
     
     enum NewsCodingKeys: String, CodingKey {
@@ -86,6 +88,8 @@ class Feed: Decodable {
     
     enum SizesCodingKeys: String, CodingKey {
         case url
+        case width
+        case height
     }
     
     enum GroupCodingKeys: String, CodingKey {
@@ -100,6 +104,8 @@ class Feed: Decodable {
     required init(from decoder: Decoder) throws {
         let response = try decoder.container(keyedBy: ResponseCodingKeys.self)
         let items = try response.nestedContainer(keyedBy: ItemsCodingKeys.self, forKey: .response)
+        let nextFrom = try items.decode(String.self, forKey: .nextFrom)
+        self.nextFrom = nextFrom
         
         let dispatchGroup = DispatchGroup()
 
@@ -140,22 +146,22 @@ class Feed: Decodable {
                 let newsContainer = try! news.nestedContainer(keyedBy: NewsCodingKeys.self)
 
                 let sourceID = try! newsContainer.decode(Int.self, forKey: .sourceID)
-                let text = try! newsContainer.decode(String.self, forKey: .text)
+                let text = try? newsContainer.decode(String.self, forKey: .text)
                 let date = try! newsContainer.decode(Int.self, forKey: .date)
 
-                let commentsContainer = try! newsContainer.nestedContainer(keyedBy: CommentsCodingKeys.self, forKey: .comments)
-                let commentsCount = try! commentsContainer.decode(Int.self, forKey: .count)
+                let commentsContainer = try? newsContainer.nestedContainer(keyedBy: CommentsCodingKeys.self, forKey: .comments)
+                let commentsCount = try? commentsContainer?.decode(Int.self, forKey: .count)
 
-                let likesContainer = try! newsContainer.nestedContainer(keyedBy: LikesCodingKeys.self, forKey: .likes)
-                let likesCount = try! likesContainer.decode(Int.self, forKey: .count)
-                let isUserLikesInt = try! likesContainer.decode(Int.self, forKey: .userLikes)
+                let likesContainer = try? newsContainer.nestedContainer(keyedBy: LikesCodingKeys.self, forKey: .likes)
+                let likesCount: Int = try! likesContainer?.decode(Int.self, forKey: .count) ?? 0
+                let isUserLikesInt: Int = try! likesContainer?.decode(Int.self, forKey: .userLikes) ?? 0
                 let isUserLikesBool = isUserLikesInt == 0 ? false : true
 
-                let repostsContainer = try! newsContainer.nestedContainer(keyedBy: RepostsCodingKeys.self, forKey: .reposts)
-                let repostsCount = try! repostsContainer.decode(Int.self, forKey: .count)
+                let repostsContainer = try? newsContainer.nestedContainer(keyedBy: RepostsCodingKeys.self, forKey: .reposts)
+                let repostsCount: Int = try! repostsContainer?.decode(Int.self, forKey: .count) ?? 0
                 
-                let viewsContainer = try! newsContainer.nestedContainer(keyedBy: ViewsCodingKeys.self, forKey: .views)
-                let viewsCount = try! viewsContainer.decode(Int.self, forKey: .count)
+                let viewsContainer = try? newsContainer.nestedContainer(keyedBy: ViewsCodingKeys.self, forKey: .views)
+                let viewsCount: Int = try! viewsContainer?.decode(Int.self, forKey: .count) ?? 0
 
                 let attachments = try? newsContainer.nestedUnkeyedContainer(forKey: .attachments)
 
@@ -178,9 +184,20 @@ class Feed: Decodable {
                         for z in 0..<sizesCount {
                             let sizeContainer = try! sizes.nestedContainer(keyedBy: SizesCodingKeys.self)
                             let url = try! sizeContainer.decode(String.self, forKey: .url)
+                            let width = try! sizeContainer.decode(Int.self, forKey: .width)
+                            let height = try! sizeContainer.decode(Int.self, forKey: .height)
 
                             if z == sizesCount-1 {
-                                let news = News(sourceID: sourceID, text: text, date: date, photoURL: url, commentCount: commentsCount, likesCount: likesCount, isUserLikes: isUserLikesBool, repostsCount: repostsCount, viewsCount: viewsCount)
+                                let photo = VKImage(url: url, height: height, width: width)
+                                let news = News(sourceID: sourceID,
+                                                text: text ?? "",
+                                                date: date,
+                                                photo: photo,
+                                                commentCount: commentsCount ?? 0,
+                                                likesCount: likesCount,
+                                                isUserLikes: isUserLikesBool,
+                                                repostsCount: repostsCount,
+                                                viewsCount: viewsCount)
 
                                 DispatchQueue.main.async {
                                     self.newsArray.append(news)
@@ -195,8 +212,8 @@ class Feed: Decodable {
         dispatchGroup.wait()
 
         dispatchGroup.notify(queue: DispatchQueue.main) {
-            print(self.groups)
-            print(self.newsArray)
+//            print(self.groups)
+//            print(self.newsArray)
         }
     }
 }

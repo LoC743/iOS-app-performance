@@ -18,6 +18,8 @@ class VKImage: Object {
     @objc dynamic var width: Int = 0
     @objc dynamic var url: String = ""
     
+    var aspectRatio: CGFloat { return CGFloat(height)/CGFloat(width) }
+    
     convenience init(url: String, height: Int, width: Int) {
         self.init()
         
@@ -58,6 +60,12 @@ class Image: Object {
         self.photo50 = photo50
         self.photo100 = photo100
         self.photo200 = photo200
+    }
+    
+    convenience init(vkImage: VKImage) {
+        self.init()
+        
+        self.photo200 = vkImage
     }
     
     override class func primaryKey() -> String? {

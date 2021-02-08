@@ -41,7 +41,6 @@
 		8AB0A4B925B6EDE7009B3448 /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB0A4B825B6EDE7009B3448 /* PhotoService.swift */; };
 		8AB781B72539C4F6007AE4B2 /* NewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB781B62539C4F6007AE4B2 /* NewsTableViewController.swift */; };
 		8AB781BB2539C51A007AE4B2 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB781B92539C51A007AE4B2 /* NewsTableViewCell.swift */; };
-		8AB781BC2539C51A007AE4B2 /* NewsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AB781BA2539C51A007AE4B2 /* NewsTableViewCell.xib */; };
 		8ABAE8F725711740008F11A4 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABAE8F625711740008F11A4 /* DatabaseManager.swift */; };
 		8AC1AB8425AF0252000D23B9 /* GetDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1AB8325AF0252000D23B9 /* GetDataOperation.swift */; };
 		8AC1AB8725AF026D000D23B9 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1AB8625AF026D000D23B9 /* AsyncOperation.swift */; };
@@ -100,7 +99,6 @@
 		8AB0A4B825B6EDE7009B3448 /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
 		8AB781B62539C4F6007AE4B2 /* NewsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewController.swift; sourceTree = "<group>"; };
 		8AB781B92539C51A007AE4B2 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
-		8AB781BA2539C51A007AE4B2 /* NewsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTableViewCell.xib; sourceTree = "<group>"; };
 		8ABAE8F625711740008F11A4 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		8AC1AB8325AF0252000D23B9 /* GetDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDataOperation.swift; sourceTree = "<group>"; };
 		8AC1AB8625AF026D000D23B9 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
@@ -267,7 +265,6 @@
 			children = (
 				8AB781B62539C4F6007AE4B2 /* NewsTableViewController.swift */,
 				8AB781B92539C51A007AE4B2 /* NewsTableViewCell.swift */,
-				8AB781BA2539C51A007AE4B2 /* NewsTableViewCell.xib */,
 			);
 			path = NewsTab;
 			sourceTree = "<group>";
@@ -374,7 +371,6 @@
 				8AE4267B25A3444C003FEB87 /* UserImageCollectionViewCell.xib in Resources */,
 				8AE4268325A3459A003FEB87 /* HeaderSectionCollectionReusableView.xib in Resources */,
 				8A788B4525A5B82C00614B7D /* HeaderGroupSectionCollectionReusableView.xib in Resources */,
-				8AB781BC2539C51A007AE4B2 /* NewsTableViewCell.xib in Resources */,
 				8A788B4025A5B6A400614B7D /* GroupImageCollectionViewCell.xib in Resources */,
 				8A9A174325223748003E44BC /* Main.storyboard in Resources */,
 				8AE4267325A341B0003FEB87 /* UserProfileViewController.xib in Resources */,
@@ -620,6 +616,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9LK5ZZR926;
 				INFOPLIST_FILE = SocialAppVK/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -639,6 +636,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9LK5ZZR926;
 				INFOPLIST_FILE = SocialAppVK/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
