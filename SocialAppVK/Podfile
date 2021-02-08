@@ -12,5 +12,6 @@ target 'SocialAppVK' do
   pod 'Firebase/Database'
   pod 'Firebase/Firestore'
   pod 'PromiseKit'
+  pod 'Texture'
 
 end

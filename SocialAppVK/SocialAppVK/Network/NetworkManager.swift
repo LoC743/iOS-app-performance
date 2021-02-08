@@ -24,6 +24,7 @@ class NetworkManager {
     
     enum Paths: String {
         case friends = "friends.get"
+        case getAlbums = "photos.getAlbums"
         case photos = "photos.get"
         case groups = "groups.get"
         case searchGroups = "groups.search"
@@ -84,6 +85,32 @@ class NetworkManager {
     }
     
     @discardableResult
+    func getAlbums(ownerID: String, completion: @escaping (AlbumList?) -> Void) -> Request? {
+        guard let token = UserSession.instance.token else { return nil }
+        
+        let path = Paths.getAlbums.rawValue
+        
+        let parameters: Parameters = [
+            "access_token": token,
+            "v": versionVKAPI,
+            "owner_id": ownerID,
+        ]
+        
+        let url = baseURL + path
+        
+        return Session.custom.request(url, parameters: parameters).responseData { response in
+            guard let data = response.value,
+                  let albumList = try? JSONDecoder().decode(AlbumList.self, from: data)
+            else {
+                print("Failed to pase group JSON!")
+                return
+            }
+            
+            completion(albumList)
+        }
+    }
+    
+    @discardableResult
     func getPhotos(ownerID: String, count: Int, offset: Int, type: PhotoAlbum, completion: @escaping (ImageList?) -> Void, failure: @escaping () -> Void) -> Request? {
         guard let token = UserSession.instance.token else { return nil }
 
@@ -111,6 +138,35 @@ class NetworkManager {
                 return
             }
             
+            completion(images)
+        }
+    }
+    
+    @discardableResult
+    func getPhotosFrom(albumID: String, ownerID: String, completion: @escaping (ImageList?) -> Void, failure: @escaping () -> Void) -> Request? {
+        guard let token = UserSession.instance.token else { return nil }
+
+        let path = Paths.photos.rawValue
+
+        let parameters: Parameters = [
+            "album_id": albumID,
+            "owner_id": ownerID,
+            "access_token": token,
+            "v": versionVKAPI,
+            "extended": true,
+            "rev": true
+        ]
+
+        let url = baseURL + path
+
+        return Session.custom.request(url, parameters: parameters).responseData { response in
+            guard let data = response.value,
+                  let images = try? JSONDecoder().decode(ImageList.self, from: data)
+            else {
+                failure()
+                print("Failed to pase images JSON!")
+                return
+            }
             completion(images)
         }
     }

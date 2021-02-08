@@ -14,7 +14,10 @@
 		8A1BCF81258A1CF9008DAD90 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1BCF80258A1CF9008DAD90 /* Feed.swift */; };
 		8A25FDBE25334F5400AF98F1 /* CustomAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A25FDBD25334F5400AF98F1 /* CustomAvatarView.swift */; };
 		8A3E6DAF2525E50B00766A2E /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3E6DAE2525E50B00766A2E /* TabBarController.swift */; };
+		8A43DE8A25C9542C003E16E0 /* UserAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A43DE8925C9542C003E16E0 /* UserAlbumsViewController.swift */; };
 		8A4C2AB825418E3C00DE263F /* PhotoViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4C2AB725418E3C00DE263F /* PhotoViewerViewController.swift */; };
+		8A77050425C97B0500218FA2 /* AlbumPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A77050325C97B0500218FA2 /* AlbumPhotosViewController.swift */; };
+		8A77050825C97F4E00218FA2 /* AsyncImageCellCollectionNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A77050725C97F4E00218FA2 /* AsyncImageCellCollectionNode.swift */; };
 		8A788B3A25A5B51E00614B7D /* GroupProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A788B3825A5B51E00614B7D /* GroupProfileViewController.swift */; };
 		8A788B3B25A5B51E00614B7D /* GroupProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A788B3925A5B51E00614B7D /* GroupProfileViewController.xib */; };
 		8A788B3F25A5B6A400614B7D /* GroupImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A788B3D25A5B6A400614B7D /* GroupImageCollectionViewCell.swift */; };
@@ -70,7 +73,10 @@
 		8A1BCF80258A1CF9008DAD90 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		8A25FDBD25334F5400AF98F1 /* CustomAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAvatarView.swift; sourceTree = "<group>"; };
 		8A3E6DAE2525E50B00766A2E /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		8A43DE8925C9542C003E16E0 /* UserAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAlbumsViewController.swift; sourceTree = "<group>"; };
 		8A4C2AB725418E3C00DE263F /* PhotoViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerViewController.swift; sourceTree = "<group>"; };
+		8A77050325C97B0500218FA2 /* AlbumPhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPhotosViewController.swift; sourceTree = "<group>"; };
+		8A77050725C97F4E00218FA2 /* AsyncImageCellCollectionNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageCellCollectionNode.swift; sourceTree = "<group>"; };
 		8A788B3825A5B51E00614B7D /* GroupProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupProfileViewController.swift; sourceTree = "<group>"; };
 		8A788B3925A5B51E00614B7D /* GroupProfileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupProfileViewController.xib; sourceTree = "<group>"; };
 		8A788B3D25A5B6A400614B7D /* GroupImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -148,6 +154,16 @@
 				8A25FDBD25334F5400AF98F1 /* CustomAvatarView.swift */,
 			);
 			path = CustomTableViewCell;
+			sourceTree = "<group>";
+		};
+		8A43DEA725C9601A003E16E0 /* Albums */ = {
+			isa = PBXGroup;
+			children = (
+				8A43DE8925C9542C003E16E0 /* UserAlbumsViewController.swift */,
+				8A77050325C97B0500218FA2 /* AlbumPhotosViewController.swift */,
+				8A77050725C97F4E00218FA2 /* AsyncImageCellCollectionNode.swift */,
+			);
+			path = Albums;
 			sourceTree = "<group>";
 		};
 		8A4C2AB625418DF000DE263F /* FullscreenPhotoViewer */ = {
@@ -241,6 +257,7 @@
 				8AE4267825A3444C003FEB87 /* UserImageCollectionViewCell.swift */,
 				8AE4267925A3444C003FEB87 /* UserImageCollectionViewCell.xib */,
 				8AC1AB8D25AF0402000D23B9 /* ReloadTableDataOperation.swift */,
+				8A43DEA725C9601A003E16E0 /* Albums */,
 			);
 			path = FriendsTab;
 			sourceTree = "<group>";
@@ -437,6 +454,7 @@
 				8AC50BED2567C7FB00BB808C /* WebLoginViewController.swift in Sources */,
 				8A81F3C7254841F90093C4F7 /* PushAnimation.swift in Sources */,
 				8A81F3C3254841B80093C4F7 /* CustomInteractiveTransition.swift in Sources */,
+				8A77050825C97F4E00218FA2 /* AsyncImageCellCollectionNode.swift in Sources */,
 				8AB781BB2539C51A007AE4B2 /* NewsTableViewCell.swift in Sources */,
 				8A4C2AB825418E3C00DE263F /* PhotoViewerViewController.swift in Sources */,
 				8A25FDBE25334F5400AF98F1 /* CustomAvatarView.swift in Sources */,
@@ -444,6 +462,7 @@
 				8A3E6DAF2525E50B00766A2E /* TabBarController.swift in Sources */,
 				8AB0A4B925B6EDE7009B3448 /* PhotoService.swift in Sources */,
 				8AA99CD4252B1FF900A05F86 /* FriendsTableViewController.swift in Sources */,
+				8A43DE8A25C9542C003E16E0 /* UserAlbumsViewController.swift in Sources */,
 				8A90D18C25838224005703FC /* CurrentUser.swift in Sources */,
 				8A788B3F25A5B6A400614B7D /* GroupImageCollectionViewCell.swift in Sources */,
 				8A184F8125332C02004A002E /* CustomTableViewCell.swift in Sources */,
@@ -451,6 +470,7 @@
 				8AA99CD1252B1EDE00A05F86 /* Group.swift in Sources */,
 				8AB781B72539C4F6007AE4B2 /* NewsTableViewController.swift in Sources */,
 				8AE4268225A3459A003FEB87 /* HeaderSectionCollectionReusableView.swift in Sources */,
+				8A77050425C97B0500218FA2 /* AlbumPhotosViewController.swift in Sources */,
 				8A184F8725332D8B004A002E /* GroupSearchTableViewController.swift in Sources */,
 				8AC1AB8725AF026D000D23B9 /* AsyncOperation.swift in Sources */,
 				8AC50BE12567C47C00BB808C /* UserSession.swift in Sources */,
