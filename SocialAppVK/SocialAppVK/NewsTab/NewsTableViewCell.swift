@@ -29,6 +29,8 @@ class NewsTableViewCell: UITableViewCell {
     
     var mainScreen: NewsTableViewController?
     
+    private var screenBounds = UIScreen.main.bounds
+    
     private var post: News?
     
     private let likeImage = UIImage(systemName: "heart.fill")!
@@ -77,7 +79,7 @@ class NewsTableViewCell: UITableViewCell {
         let frame = CGRect(
             x: originX,
             y: 15,
-            width: bounds.width - originX - 15,
+            width: screenBounds.width - originX - 15,
             height: 19
         )
         nameLabel.frame = frame
@@ -119,6 +121,7 @@ class NewsTableViewCell: UITableViewCell {
     private func layoutTextLabel(text: String) {
         isExpandable = false
         let avatarImageViewFrame = avatarImageView.frame
+        
         if text.isEmpty {
             let origin = CGPoint(x: 10, y: avatarImageViewFrame.maxY + 10)
             postTextLabel.frame = CGRect(origin: origin, size: .zero)
@@ -127,16 +130,19 @@ class NewsTableViewCell: UITableViewCell {
             var height = size.height
             if size.height > maxHeight {
                 height = maxHeight
-                setupMoreButton()
                 isExpandable = true
             }
             let frame = CGRect(
                 x: 10,
                 y: avatarImageViewFrame.maxY + 10,
-                width: bounds.width - 20,
+                width: screenBounds.width - 20,
                 height: height
             )
             postTextLabel.frame = frame
+            
+            if (isExpandable) {
+                setupMoreButton()
+            }
         }
     }
 
@@ -155,7 +161,7 @@ class NewsTableViewCell: UITableViewCell {
     private func layoutMoreButton() {
         let postTextLabelFrame = postTextLabel.frame
         let frame = CGRect(
-            x: bounds.maxX - 82,
+            x: screenBounds.maxX - 82,
             y: postTextLabelFrame.maxY - 5,
             width: 77,
             height: 30
@@ -188,12 +194,20 @@ class NewsTableViewCell: UITableViewCell {
     
     private func layoutPostImageView(photo: VKImage) {
         let postTextLabelFrame = postTextLabel.frame
-        let frameWidth: CGFloat = CGFloat(photo.width) > bounds.width ? bounds.width : CGFloat(photo.width)
+        
+        var frameWidth: CGFloat = CGFloat(photo.width) > screenBounds.width ? screenBounds.width : CGFloat(photo.width)
+        var frameHeight = frameWidth * photo.aspectRatio
+        
+        if frameHeight > screenBounds.height {
+            frameWidth /= 1.5
+            frameHeight /= 1.5
+        }
+        
         let frame = CGRect(
-            x: bounds.midX - frameWidth/2,
+            x: screenBounds.midX - frameWidth/2,
             y: postTextLabelFrame.maxY + 25,
             width: frameWidth,
-            height: frameWidth * photo.aspectRatio
+            height: frameHeight
         )
         postImageView.frame = frame
     }
@@ -307,7 +321,7 @@ class NewsTableViewCell: UITableViewCell {
         let likeButtonFrame = likeButton.frame
         let width = CGFloat(10 * viewsCount.count)
         let viewsCountLabelFrame = CGRect(
-            x: UIScreen.main.bounds.maxX - width - 5,
+            x: screenBounds.maxX - width - 5,
             y: likeButtonFrame.origin.y,
             width: CGFloat(11 * viewsCount.count),
             height: 20
@@ -418,15 +432,14 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     func cellSize() -> CGSize {
-        let width = bounds.width
-        // MARK: Dont't work somehow
+        let width = screenBounds.width
         let height = likeButton.frame.maxY + 10
-        
+
         return CGSize(width: width, height: height)
     }
     
-    func expandLabel() {
-        guard isExpandable else { return }
+    func expandLabel() -> Bool {
+        guard isExpandable else { return false }
         if !isExpanded {
             // Если лейбл требуется раскрыть
             moreButton.setTitle("Show less", for: .normal)
@@ -446,14 +459,15 @@ class NewsTableViewCell: UITableViewCell {
         }
         layoutViews()
         isExpanded = !isExpanded
+        return isExpanded
     }
     
     private func layoutViews() {
         guard let item = post else { return }
-        layoutMoreButton()
         if let photo = item.photo {
             layoutPostImageView(photo: photo)
         }
+        layoutMoreButton()
         layoutLikeButton(numberOfLikes: String(item.likesCount))
         layoutCommentButton(numberOfComments: String(item.commentCount))
         layoutRepostButton(numberOfReposts: String(item.repostsCount))

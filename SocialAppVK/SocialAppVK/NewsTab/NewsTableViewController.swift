@@ -18,7 +18,8 @@ class NewsTableViewController: UITableViewController {
     var isLoading = false
     var request: Request?
     
-    private let testCell = NewsTableViewCell()
+    private var testCell = NewsTableViewCell()
+    private var expandedCells: [IndexPath: NewsTableViewCell] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,20 +130,31 @@ class NewsTableViewController: UITableViewController {
 //    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        testCell = NewsTableViewCell()
         configureCell(cell: testCell, indexPath: indexPath)
         
+        if expandedCells[indexPath] != nil {
+            _ = testCell.expandLabel()
+        }
+        
         let height = testCell.cellSize().height
-        return 800
+        return height
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
-        
-        cell?.expandLabel()
-                                            
-        tableView.beginUpdates()
-        tableView.endUpdates()
-        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        if let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell {
+            let isExpanded = cell.expandLabel()
+            
+            if isExpanded {
+                expandedCells[indexPath] = cell
+            } else {
+                expandedCells[indexPath] = nil
+            }
+                                                
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
     }
 }
 
